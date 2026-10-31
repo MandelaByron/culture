@@ -1,13 +1,29 @@
+import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full  flex-col items-center justify-between bg-white dark:bg-black sm:items-start">
-          <span>My Navbar</span>
-
-          <span>My Content</span>
-      </main>
-    </div>
+    <main className="p-1.5">
+      <section className="relative h-svh w-full overflow-hidden rounded-lg">
+        <Image
+          src="/images/3-faces.jpg"
+          alt="Three women in colorful headwraps"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <h1 className="absolute inset-x-0 bottom-0">
+          <Image
+            src="/images/logo.svg"
+            alt="Grain Archive"
+            width={355}
+            height={58}
+            priority
+            className="h-auto w-full"
+          />
+        </h1>
+      </section>
+    </main>
   );
 }
 
