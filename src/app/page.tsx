@@ -1,4 +1,6 @@
 import Image from "next/image";
+import CategoryCards from "@/components/categories";
+import ViewAll from "@/components/viewall";
 
 export default function Home() {
   return (
@@ -23,6 +25,8 @@ export default function Home() {
           />
         </h1>
       </section>
+      <CategoryCards />
+      <ViewAll />
     </main>
   );
 }
