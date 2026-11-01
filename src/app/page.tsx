@@ -2,6 +2,7 @@ import Image from "next/image";
 import CategoryCards from "@/components/categories";
 import ViewAll from "@/components/viewall";
 import FeaturedStory from "@/components/featurestory";
+import BeautifulPeople from "@/components/beautiful_people";
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
       <CategoryCards />
       <ViewAll />
       <FeaturedStory />
+      <BeautifulPeople />
     </main>
   );
 }
