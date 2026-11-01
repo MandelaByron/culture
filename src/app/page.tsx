@@ -3,7 +3,7 @@ import CategoryCards from "@/components/categories";
 import ViewAll from "@/components/viewall";
 import FeaturedStory from "@/components/featurestory";
 import BeautifulPeople from "@/components/beautiful_people";
-
+import ImageBreak from "@/components/imagebreak";
 export default function Home() {
   return (
     <main className="p-1.5">
@@ -31,6 +31,7 @@ export default function Home() {
       <ViewAll />
       <FeaturedStory />
       <BeautifulPeople />
+      <ImageBreak />
     </main>
   );
 }
