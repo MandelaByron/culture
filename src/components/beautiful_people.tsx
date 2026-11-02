@@ -35,7 +35,7 @@ const photos: Photo[] = [
 export function BeautifulPeople() {
   return (
     <section className="p-1.5">
-      <div className="rounded-lg bg-slate-50 p-3 text-black sm:p-4">
+      <div className="rounded-lg bg-slate-200 p-3 text-black sm:p-4">
         <h2 className="mb-6 font-serif text-5xl font-medium leading-none tracking-tight sm:mb-8 sm:text-7xl lg:text-8xl">
           Beautiful People
         </h2>

@@ -19,7 +19,7 @@ const items: ArchiveItem[] = [
     title: "African Americans at Work",
     category: "Photo",
     date: "2028-08-21",
-    image: "/images/cards/kora-2.jpg",
+    image: "/images/cards/kora-4.jpg",
     alt: "Woman in a patterned dress playing a harp-lute",
   },
   {
@@ -65,7 +65,7 @@ export function CategoryCards() {
           href={`/archive/${item.slug}`}
           className="group block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2"
         >
-          <Card className="relative aspect-[4/5] gap-0 overflow-hidden rounded-lg border-0 p-0">
+          <Card className="relative aspect-[4/3] gap-0 overflow-hidden rounded-lg border-0 p-0">
             <Image
               src={item.image}
               alt={item.alt}
@@ -74,7 +74,7 @@ export function CategoryCards() {
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
 
-            <div className="absolute inset-x-3 bottom-3 rounded-md bg-black/30 p-3 text-white backdrop-blur-md">
+            <div className="absolute inset-x-3 bottom-3 rounded-md bg-zinc-950/60 p-3 text-white backdrop-blur-md">
               <h2 className="line-clamp-2 text-sm font-semibold leading-snug">
                 {item.title}
               </h2>
