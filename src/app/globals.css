@@ -127,6 +127,9 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image: url("/images/grain-dark.webp"); /* file in public/images/ */
+    background-repeat: repeat;
+    background-size: 200px;
   }
 
 }
