@@ -133,3 +133,15 @@
   }
 
 }
+
+@layer utilities {
+  .bg-grain-charcoal {
+    background-image: url("/images/grain-charcoal.webp");
+    background-size: 256px;
+  }
+
+  .bg-grain-graphite {
+    background-image: url("/images/grain-graphite.webp");
+    background-size: 256px;
+  }
+}

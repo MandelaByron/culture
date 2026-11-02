@@ -56,7 +56,7 @@ function NavGroup({ title, items }: { title: string; items: NavItem[] }) {
 export function Footer() {
   return (
     <footer className="p-1.5">
-      <div className=" bg-zinc-950 flex flex-col gap-10 rounded-lg py-30 px-5 text-white w-full sm:p-4 lg:min-h-[480px] lg:items-end lg:flex-row lg:justify-center lg:gap-10">
+      <div className="flex flex-col gap-10 rounded-lg py-30 px-5 text-white w-full sm:p-4 lg:min-h-[480px] lg:items-end lg:flex-row lg:justify-center lg:gap-10">
        {/* Wordmark: logo SVG below lg, serif text at lg */}
        <Image
           src="/images/logo-md.svg"

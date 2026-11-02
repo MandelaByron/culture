@@ -28,7 +28,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col font-[family-name:var(--font-poppins)]">
         <Navbar />
         {children}
-        <ImageBreak />
+        
         <Footer />
       </body>
     </html>
