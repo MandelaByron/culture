@@ -77,7 +77,7 @@ export function Footer() {
           </div>
 
           <p className="text-base leading-snug md:text-right">
-            ©{new Date().getFullYear()} Grain Archive
+            ©2026 Grain Archive
             <br />
             Words, images, and signals from the edge
           </p>
