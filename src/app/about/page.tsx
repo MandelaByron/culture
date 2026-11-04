@@ -47,9 +47,9 @@ export default function AboutPage() {
       </section>
 
       {/* Why this exists */}
-      <section className="mx-auto grid max-w-5xl gap-3 px-5 pb-24 sm:pb-40 md:grid-cols-[240px_1fr]">
-        <h2 className="text-base font-semibold">Why this exists</h2>
-        <p className="text-base font-semibold leading-7">
+      <section className="mx-auto grid max-w-5xl gap-3  pb-24 sm:pb-40 md:grid-cols-[240px_1fr]">
+        <h2 className="text-xl font-semibold">Why this exists</h2>
+        <p className="text-xl font-semibold leading-7">
           Grain Archive is a running record of the fuzz, fragments, and found
           moments in music, film, and visual culture. From washed-out shoegaze
           to sun-faded celluloid, we document the tones that don’t always get
