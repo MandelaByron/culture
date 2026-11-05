@@ -1,29 +1,33 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Play } from "lucide-react";
+import Image from 'next/image'
+import Link from 'next/link'
+import {Play} from 'lucide-react'
 
-// Hard-coded for now. Swap for a CMS / DB call later.
-const story = {
-  slug: "what-the-hands-remember",
-  title: "What the Hands Remember",
-  image: "/images/story.jpg",
-  alt: "Two workers in a factory, black and white photograph",
-  background: "/images/texture-2.jpg",
-};
+export type FeaturedStoryData = {
+  slug: string
+  title: string
+  image: string
+  alt: string
+  background?: string | null
+}
 
-export function FeaturedStory() {
+type FeaturedStoryProps = {
+  story: FeaturedStoryData
+}
+
+export function FeaturedStory({story}: FeaturedStoryProps) {
   return (
     <section className="p-1.5">
       <div className="relative flex min-h-[560px] flex-col overflow-hidden rounded-lg bg-[#161616] text-white sm:min-h-[720px]">
-        {/* Background texture */}
-        <Image
-          src={story.background}
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover opacity-60"
-          aria-hidden
-        />
+        {story.background ? (
+          <Image
+            src={story.background}
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover opacity-60"
+            aria-hidden
+          />
+        ) : null}
 
         <div className="relative flex flex-1 flex-col px-3 pb-12 pt-4 sm:px-6">
           <h2 className="font-serif text-5xl font-medium leading-none tracking-tight sm:text-7xl lg:text-8xl">
@@ -57,7 +61,7 @@ export function FeaturedStory() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
-export default FeaturedStory;
+export default FeaturedStory

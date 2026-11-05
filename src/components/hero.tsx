@@ -1,17 +1,13 @@
-import Image from "next/image";
+import Image from 'next/image'
 
 type HeroProps = {
-  src?: string;
-  alt?: string;
+  src: string
+  alt: string
   /** CSS object-position for the image, e.g. "center 30%" */
-  position?: string;
-};
+  position?: string
+}
 
-export function Hero({
-  src = "/images/3-faces.jpg",
-  alt = "Three women in colorful headwraps",
-  position = "center",
-}: HeroProps) {
+export function Hero({src, alt, position = 'center'}: HeroProps) {
   return (
     <section className="p-1.5">
       <div className="relative h-svh w-full overflow-hidden rounded-lg">
@@ -22,7 +18,7 @@ export function Hero({
           priority
           sizes="100vw"
           className="object-cover"
-          style={{ objectPosition: position }}
+          style={{objectPosition: position}}
         />
         <h1 className="absolute inset-x-0 bottom-0">
           <Image
@@ -36,7 +32,7 @@ export function Hero({
         </h1>
       </div>
     </section>
-  );
+  )
 }
 
-export default Hero;
+export default Hero
