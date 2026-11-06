@@ -144,4 +144,9 @@
     background-image: url("/images/grain-graphite.webp");
     background-size: 256px;
   }
+
+  .bg-grain-white {
+    background-image: url("/images/grain-light.webp");
+    background-size: 256px;
+  }
 }

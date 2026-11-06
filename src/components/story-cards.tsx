@@ -29,7 +29,7 @@ export function StoryCards({items}: StoryCardsProps) {
           href={`/archive/${item.slug}`}
           className="group block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2"
         >
-          <Card className="relative aspect-[4/3] gap-0 overflow-hidden rounded-lg border-0 p-0">
+          <Card className="relative aspect-[4/3] gap-0 overflow-hidden rounded-lg border-0 p-0 bg-primary">
             <Image
               src={item.image}
               alt={item.alt}

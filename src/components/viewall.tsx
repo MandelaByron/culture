@@ -12,7 +12,7 @@ export function ViewAll({
     <section className="p-1.5">
       <Button
         variant="ghost"
-        className="h-auto w-full rounded-lg bg-[#161616] py-12 font-serif text-5xl font-medium text-white transition-colors duration-300 hover:bg-white hover:text-black sm:py-16 sm:text-6xl"
+        className="h-auto w-full rounded-lg bg-white py-12 font-serif text-5xl font-medium transition-colors duration-300 hover:bg-orange-400 hover:text-black sm:py-16 sm:text-6xl"
       >
         <Link href={href}>{label}</Link>
       </Button>

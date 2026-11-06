@@ -20,7 +20,7 @@ export function Hero({src, alt, position = 'center'}: HeroProps) {
           className="object-cover"
           style={{objectPosition: position}}
         />
-        <h1 className="absolute inset-x-0 bottom-0">
+        {/* <h1 className="absolute inset-x-0 bottom-0">
           <Image
             src="/images/logo.svg"
             alt="Grain Archive"
@@ -29,7 +29,7 @@ export function Hero({src, alt, position = 'center'}: HeroProps) {
             priority
             className="h-auto w-full"
           />
-        </h1>
+        </h1> */}
       </div>
     </section>
   )
