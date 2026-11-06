@@ -1,8 +1,9 @@
 import type {Metadata} from 'next'
 import {StoryCards} from '@/components/story-cards'
-import {sanityFetch} from '@/sanity/lib/live'
+import {sanityFetch,sanityFetchMetadata} from '@/sanity/lib/live'
 import {toStoryCardItems} from '@/sanity/lib/mappers'
 import {ARCHIVE_PAGE_QUERY, SITE_SETTINGS_QUERY} from '@/sanity/lib/queries'
+
 
 export async function generateMetadata(): Promise<Metadata> {
   const {data: settings} = await sanityFetch({query: SITE_SETTINGS_QUERY, stega: false})
@@ -14,6 +15,29 @@ export async function generateMetadata(): Promise<Metadata> {
     description: tagline,
   }
 }
+
+// export async function generateMetadata(
+//   {params}: PageProps<'/[slug]'>,
+//   parent: ResolvingMetadata,
+// ): Promise<Metadata> {
+//   const [{slug}, {perspective}] = await Promise.all([params, getDynamicFetchOptions()])
+//   const slugPageMetadataQuery = defineQuery(`
+//     *[_type == "page" && slug.current == $slug][0] {
+//       title,
+//       "overview": pt::text(overview),
+//     }
+//   `)
+//   const {data} = await sanityFetchMetadata({
+//     query: slugPageMetadataQuery,
+//     params: {slug},
+//     perspective,
+//   })
+
+//   return {
+//     title: data?.title,
+//     description: data?.overview || (await parent).description,
+//   }
+// }
 
 export default async function StoriesPage() {
   const {data} = await sanityFetch({query: ARCHIVE_PAGE_QUERY, stega: false})

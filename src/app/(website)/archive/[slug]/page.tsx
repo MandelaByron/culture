@@ -13,18 +13,18 @@ import {
   STORY_SLUGS_QUERY,
 } from '@/sanity/lib/queries'
 
-export async function generateStaticParams() {
-  const {data} = await sanityFetch({
-    query: STORY_SLUGS_QUERY,
-    perspective: 'published',
-    stega: false,
-  })
+// export async function generateStaticParams() {
+//   const {data} = await sanityFetch({
+//     query: STORY_SLUGS_QUERY,
+//     perspective: 'published',
+//     stega: false,
+//   })
 
-  return (data ?? [])
-    .map((story) => story.slug)
-    .filter((slug): slug is string => Boolean(slug))
-    .map((slug) => ({slug}))
-}
+//   return (data ?? [])
+//     .map((story) => story.slug)
+//     .filter((slug): slug is string => Boolean(slug))
+//     .map((slug) => ({slug}))
+// }
 
 export async function generateMetadata(
   props: PageProps<'/archive/[slug]'>,

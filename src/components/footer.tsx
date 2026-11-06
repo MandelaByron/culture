@@ -4,14 +4,14 @@ import Link from 'next/link'
 export type FooterLink = {
   label: string
   href: string
-  external?: boolean
+  external: boolean
 }
 
 type FooterProps = {
-  title?: string
-  tagline?: string
-  footerLinks?: FooterLink[]
-  connectLinks?: FooterLink[]
+  title: string 
+  tagline: string
+  footerLinks: FooterLink[]
+  connectLinks: FooterLink[]
 }
 
 function NavGroup({title, items}: {title: string; items: FooterLink[]}) {

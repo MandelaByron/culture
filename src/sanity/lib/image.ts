@@ -9,28 +9,16 @@ export const urlFor = (source: SanityImageSource) => {
   return builder.image(source).auto('format')
 }
 
-export type HotspotLike = {
-  x?: number
-  y?: number
-} | null
-
-/** CSS object-position from a Sanity image hotspot (0–1 coords). */
-export function hotspotToObjectPosition(hotspot?: HotspotLike): string | undefined {
-  if (hotspot?.x == null || hotspot?.y == null) return undefined
-  return `${hotspot.x * 100}% ${hotspot.y * 100}%`
-}
-
 /** Resolved image fields for next/image from an accessibleImage-shaped value. */
 export type ResolvedImage = {
   src: string
   alt: string
-  objectPosition?: string
-  lqip?: string
+
 }
 
 type AccessibleImageLike = {
-  alt?: string | null
-  image?: (SanityImageSource & {hotspot?: HotspotLike}) | null
+  alt: string | null
+  image: (SanityImageSource | null)
 } | null
 
 export function resolveAccessibleImage(
@@ -45,9 +33,6 @@ export function resolveAccessibleImage(
   return {
     src,
     alt: value.alt ?? '',
-    objectPosition: hotspotToObjectPosition(
-      'hotspot' in value.image ? value.image.hotspot : undefined,
-    ),
   }
 }
 

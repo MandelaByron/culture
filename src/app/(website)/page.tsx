@@ -10,17 +10,15 @@ import {
   toFeaturedStory,
   toStoryCardItems,
 } from '@/sanity/lib/mappers'
-import { DynamicFetchOptions } from '@/sanity/lib/live'
 import {resolveAccessibleImage} from '@/sanity/lib/image'
 import {HOME_PAGE_QUERY} from '@/sanity/lib/queries'
 
-export default async function Home({perspective, stega}: DynamicFetchOptions){
-  'use cache'
-  const {data} = await sanityFetch({query: HOME_PAGE_QUERY, perspective, stega})
+export default async function Home(){
+  const {data} = await sanityFetch({query: HOME_PAGE_QUERY})
   const home = data?.home
   const recentStories = toStoryCardItems(data?.recentStories)
 
-  const hero = resolveAccessibleImage(home?.heroImage, 2400)
+  const hero = resolveAccessibleImage(home.heroImage, 2400)
   const featured = toFeaturedStory(home?.featuredStory, home?.featuredBackground)
   const beautifulPeoplePhotos = toBeautifulPeoplePhotos(home?.beautifulPeople?.photos)
   const imageBreak = resolveAccessibleImage(home?.imageBreak, 2000)
