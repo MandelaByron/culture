@@ -13,12 +13,21 @@ export const urlFor = (source: SanityImageSource) => {
 export type ResolvedImage = {
   src: string
   alt: string
-
+  /** Intrinsic pixel width from Sanity asset metadata — use as next/image `width` prop. */
+  naturalWidth: number | null
+  /** Intrinsic pixel height from Sanity asset metadata — use as next/image `height` prop. */
+  naturalHeight: number | null
 }
 
 type AccessibleImageLike = {
   alt: string | null
-  image: (SanityImageSource | null)
+  image: (SanityImageSource & {
+    asset?: {
+      metadata?: {
+        dimensions?: {width?: number | null; height?: number | null} | null
+      } | null
+    } | null
+  }) | null
 } | null
 
 export function resolveAccessibleImage(
@@ -30,9 +39,13 @@ export function resolveAccessibleImage(
   const src = urlFor(value.image).width(width).fit('max').url()
   if (!src) return null
 
+  const dims = (value.image as {asset?: {metadata?: {dimensions?: {width?: number | null; height?: number | null} | null} | null} | null})?.asset?.metadata?.dimensions
+
   return {
     src,
     alt: value.alt ?? '',
+    naturalWidth: dims?.width ?? null,
+    naturalHeight: dims?.height ?? null,
   }
 }
 

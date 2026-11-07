@@ -5,29 +5,53 @@ type StoryFigureProps = {
   alt: string
   title: string
   meta: string
+  /** Intrinsic pixel width from Sanity metadata — enables natural-ratio rendering. */
+  naturalWidth?: number | null
+  /** Intrinsic pixel height from Sanity metadata — enables natural-ratio rendering. */
+  naturalHeight?: number | null
 }
 
-/** Image inside a lighter charcoal panel, with the caption over the bottom-left. */
-export function StoryFigure({image, alt, title, meta}: StoryFigureProps) {
-  return (
-    <section className="p-1.5">
-      <div className="bg-grain-charcoal rounded-lg px-4 py-12">
-        <figure className="relative aspect-[4/3] overflow-hidden rounded-md sm:aspect-[2/1]">
-          <Image
-            src={image}
-            alt={alt}
-            fill
-            sizes="100vw"
-            className="object-cover"
-            style={{objectPosition: 'center'}}
-          />
+/**
+ * Editorial figure: image renders at its natural aspect ratio (no crop),
+ * centred in a constrained column, with the caption placed below.
+ */
+export function StoryFigure({image, alt, title, meta, naturalWidth, naturalHeight}: StoryFigureProps) {
+  const hasNaturalDims = naturalWidth && naturalHeight
 
-          <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 to-transparent p-5 pt-20 text-white">
-            <p className="text-lg font-semibold leading-tight">{title}</p>
-            <p className="mt-1 font-serif text-xs font-bold text-white/90">{meta}</p>
-          </figcaption>
-        </figure>
-      </div>
+  return (
+    <section className="px-4 py-10 sm:py-14">
+      <figure className="mx-auto max-w-4xl">
+        {/* Image — scales to container width at its intrinsic ratio, no crop */}
+        <div className="overflow-hidden rounded-lg">
+          {hasNaturalDims ? (
+            <Image
+              src={image}
+              alt={alt}
+              width={naturalWidth}
+              height={naturalHeight}
+              sizes="(min-width: 1024px) 896px, (min-width: 640px) calc(100vw - 2rem), 100vw"
+              className="h-auto w-full"
+            />
+          ) : (
+            /* Fallback: fill inside a 3:2 box if metadata is unavailable */
+            <div className="relative aspect-[3/2] w-full">
+              <Image
+                src={image}
+                alt={alt}
+                fill
+                sizes="(min-width: 1024px) 896px, (min-width: 640px) calc(100vw - 2rem), 100vw"
+                className="object-cover"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Caption below the image */}
+        <figcaption className="mt-4 flex items-baseline justify-between gap-4 px-1">
+          <p className="font-serif text-sm font-semibold text-white/90 leading-snug">{title}</p>
+          <p className="shrink-0 font-serif text-xs text-white/50">{meta}</p>
+        </figcaption>
+      </figure>
     </section>
   )
 }

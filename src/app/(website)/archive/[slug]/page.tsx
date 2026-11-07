@@ -60,33 +60,54 @@ export default async function StoryPage(props: PageProps<'/archive/[slug]'>) {
 
   return (
     <main className="bg-grain min-h-svh text-white [--grain-base:#161616]">
-      <h1 className="mx-auto max-w-5xl text-balance px-3 pb-24 pt-36 text-center font-serif text-6xl font-medium leading-none tracking-tight sm:pb-44 sm:pt-44 sm:text-8xl">
+
+      {/* ── Title ─────────────────────────────────────────────────────── */}
+      <h1 className="mx-auto max-w-4xl text-balance px-4 pb-16 pt-36 text-center font-serif text-6xl font-medium leading-none tracking-tight sm:pb-28 sm:pt-44 sm:text-8xl">
         {story.title}
       </h1>
 
+      {/* ── Hero image — natural ratio, no crop, centred spine ─────────── */}
       {hero ? (
-        <section className="p-1.5">
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg sm:aspect-[2/1]">
-            <Image
-              src={hero.src}
-              alt={hero.alt}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-              style={{objectPosition: 'center'}}
-            />
+        <section className="px-4 pb-10 sm:pb-16">
+          <div className="mx-auto max-w-4xl overflow-hidden rounded-lg">
+            {hero.naturalWidth && hero.naturalHeight ? (
+              <Image
+                src={hero.src}
+                alt={hero.alt}
+                width={hero.naturalWidth}
+                height={hero.naturalHeight}
+                preload
+                sizes="(min-width: 1024px) 896px, (min-width: 640px) calc(100vw - 2rem), 100vw"
+                className="h-auto w-full"
+              />
+            ) : (
+              /* Fallback if metadata is absent */
+              <div className="relative aspect-[4/3] sm:aspect-[3/2]">
+                <Image
+                  src={hero.src}
+                  alt={hero.alt}
+                  fill
+                  preload
+                  sizes="(min-width: 1024px) 896px, (min-width: 640px) calc(100vw - 2rem), 100vw"
+                  className="object-cover"
+                />
+              </div>
+            )}
           </div>
         </section>
       ) : null}
 
+      {/* ── Intro ─────────────────────────────────────────────────────── */}
       {story.intro ? (
-        <section className="grid gap-3 px-5 py-20 sm:py-28 md:grid-cols-[240px_1fr]">
-          <h2 className="font-serif text-sm font-bold">Intro</h2>
-          <p className="font-serif text-base font-bold leading-7">{story.intro}</p>
+        <section className="mx-auto max-w-2xl px-4 py-14 sm:py-20">
+          <p className="mb-3 font-serif text-xs font-bold uppercase tracking-widest text-white/40">
+            Intro
+          </p>
+          <p className="font-serif text-base font-bold leading-7 text-white/90">{story.intro}</p>
         </section>
       ) : null}
 
+      {/* ── Figures — natural ratio, caption below ─────────────────────── */}
       {story.figures?.map((figure) => {
         const image = resolveAccessibleImage(figure, 2000)
         if (!image) return null
@@ -98,6 +119,8 @@ export default async function StoryPage(props: PageProps<'/archive/[slug]'>) {
             alt={image.alt}
             title={story.title}
             meta={meta}
+            naturalWidth={image.naturalWidth}
+            naturalHeight={image.naturalHeight}
           />
         )
       })}
