@@ -1,10 +1,14 @@
-import Image from 'next/image'
 import HomeCategories, {type CategoryCard} from '@/components/home-categories'
 import FeaturedStories, {type FeaturedStoryCard} from '@/components/featured-stories'
+import HeroVideo from '@/components/hero-video'
 import {sanityFetch} from '@/sanity/lib/live'
-import {resolveAccessibleImage} from '@/sanity/lib/image'
 import {HOME_PAGE_QUERY} from '@/sanity/lib/queries'
 import {notFound} from 'next/navigation'
+
+// ── Hero video — paste your URL here (or leave this sample for preview) ───────
+const HERO_VIDEO_URL =
+  'https://museumplatform.b-cdn.net/files/r35o2ddl/production/7f1c5182d3443bddaebabd46292e71ba9e5037d6.mp4'
+// ──────────────────────────────────────────────────────────────────────────────
 
 // ── Placeholder data (replace with Sanity queries when types are ready) ────────
 
@@ -61,47 +65,16 @@ export default async function Home() {
   const home = data.home
   if (!home) notFound()
 
-  const hero = resolveAccessibleImage(home.heroImage, 2400)
-
   return (
     <main className="bg-grain min-h-svh text-white [--grain-base:#161616]">
-
-      {/* ── Hero — reduced height, centred, no full-bleed ───────────────── */}
-      {hero ? (
-        <section className="px-4 pb-4 pt-24 sm:pt-28">
-          <div className="mx-auto max-w-6xl overflow-hidden rounded-2xl">
-            {hero.naturalWidth && hero.naturalHeight ? (
-              <Image
-                src={hero.src}
-                alt={hero.alt}
-                width={hero.naturalWidth}
-                height={hero.naturalHeight}
-                preload
-                sizes="(min-width: 1152px) 1152px, 100vw"
-                className="h-auto max-h-[60vh] w-full object-cover"
-              />
-            ) : (
-              <div className="relative aspect-[16/9] sm:aspect-[21/9]">
-                <Image
-                  src={hero.src}
-                  alt={hero.alt}
-                  fill
-                  preload
-                  sizes="(min-width: 1152px) 1152px, 100vw"
-                  className="object-cover"
-                />
-              </div>
-            )}
-          </div>
-        </section>
-      ) : null}
+      {/* ── Hero Video — reaches top of page; floating navbar sits above it ── */}
+      <HeroVideo src={HERO_VIDEO_URL} />
 
       {/* ── Categories ─────────────────────────────────────────────────── */}
       <HomeCategories items={PLACEHOLDER_CATEGORIES} />
 
       {/* ── Featured Stories ───────────────────────────────────────────── */}
       <FeaturedStories items={PLACEHOLDER_STORIES} />
-
     </main>
   )
 }
