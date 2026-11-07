@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
 export type FooterLink = {
@@ -8,21 +7,21 @@ export type FooterLink = {
 }
 
 type FooterProps = {
-  title: string 
+  title: string
   tagline: string
   footerLinks: FooterLink[]
   connectLinks: FooterLink[]
 }
 
-function NavGroup({title, items}: {title: string; items: FooterLink[]}) {
+function LinkGroup({title, items}: {title: string; items: FooterLink[]}) {
   if (!items.length) return null
 
   return (
-    <nav aria-label={title} className="flex flex-col items-start gap-2 lg:items-end">
-      <span className="rounded-full border border-white/70 px-1.5 py-px text-[8px] uppercase leading-tight tracking-wide">
+    <nav aria-label={title}>
+      <p className="mb-3 text-[10px] font-semibold uppercase tracking-widest text-white/40">
         {title}
-      </span>
-      <ul className="flex flex-col gap-0.5 text-sm">
+      </p>
+      <ul className="flex flex-col gap-1.5">
         {items.map((item) => (
           <li key={item.label}>
             {item.external ? (
@@ -30,14 +29,14 @@ function NavGroup({title, items}: {title: string; items: FooterLink[]}) {
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-lg underline underline-offset-2 hover:opacity-70"
+                className="text-sm text-white/80 transition-colors hover:text-white"
               >
                 {item.label}
               </a>
             ) : (
               <Link
                 href={item.href}
-                className="text-lg underline underline-offset-2 hover:opacity-70"
+                className="text-sm text-white/80 transition-colors hover:text-white"
               >
                 {item.label}
               </Link>
@@ -56,40 +55,46 @@ export function Footer({
   connectLinks = [],
 }: FooterProps) {
   const year = new Date().getFullYear()
-  const wordmark = title.includes(' ')
-    ? title.split(/\s+/).map((part, i) => (
-        <span key={part}>
-          {i > 0 ? <br /> : null}
-          {part}
-        </span>
-      ))
-    : title
 
   return (
-    <footer className="p-1.5">
-      <div className="flex w-full flex-col gap-10 rounded-lg px-5 py-30 text-white sm:p-4 lg:min-h-[480px] lg:flex-row lg:items-end lg:justify-center lg:gap-10">
-        <Image
-          src="/images/logo-md.svg"
-          alt={title}
-          width={355}
-          height={58}
-          className="h-auto w-full lg:hidden"
-        />
-        <p className="hidden w-[800px] self-end font-serif text-[7rem] font-medium leading-[0.9] tracking-tight lg:block xl:text-[9rem]">
-          {wordmark}
-        </p>
-        <div className="flex w-full flex-col gap-10 md:flex-row md:items-start md:justify-between lg:flex-col lg:items-end lg:justify-between lg:text-right">
-          <div className="grid grid-cols-2 gap-x-10 md:flex md:gap-x-16 lg:gap-x-10">
-            <NavGroup title="Links" items={footerLinks} />
-            <NavGroup title="Connect" items={connectLinks} />
+    <footer className="px-4 pb-8 pt-16 sm:pt-20">
+      <div className="mx-auto max-w-6xl">
+
+        {/* Top rule */}
+        <div className="mb-10 h-px w-full bg-white/10" />
+
+        {/* Main footer row */}
+        <div className="flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
+
+          {/* Brand */}
+          <div className="max-w-xs">
+            <p className="font-serif text-2xl font-medium tracking-tight text-white">
+              {title}
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-white/50">
+              {tagline}
+            </p>
           </div>
 
-          <p className="text-base leading-snug md:text-right">
-            ©{year} {title}
-            <br />
-            {tagline}
+          {/* Nav groups */}
+          {(footerLinks.length > 0 || connectLinks.length > 0) && (
+            <div className="flex gap-12 sm:gap-16">
+              <LinkGroup title="Links" items={footerLinks} />
+              <LinkGroup title="Connect" items={connectLinks} />
+            </div>
+          )}
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-12 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-white/30">
+            © {year} {title}
+          </p>
+          <p className="text-xs text-white/30">
+            Words, images, and signals from the edge.
           </p>
         </div>
+
       </div>
     </footer>
   )
