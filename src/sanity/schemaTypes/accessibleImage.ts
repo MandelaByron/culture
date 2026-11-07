@@ -11,8 +11,8 @@ export const accessibleImage = defineType({
       name: 'image',
       title: 'Image',
       type: 'image',
-      description: 'Upload an image. Use the hotspot to set the focal point.',
-      options: {hotspot: true},
+      description: 'Upload an image.',
+
       validation: (rule) => rule.required(),
     }),
     defineField({

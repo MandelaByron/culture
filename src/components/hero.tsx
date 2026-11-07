@@ -3,11 +3,9 @@ import Image from 'next/image'
 type HeroProps = {
   src: string
   alt: string
-  /** CSS object-position for the image, e.g. "center 30%" */
-  position?: string
 }
 
-export function Hero({src, alt, position = 'center'}: HeroProps) {
+export function Hero({src, alt}: HeroProps) {
   return (
     <section className="p-1.5">
       <div className="relative h-svh w-full overflow-hidden rounded-lg">
@@ -18,7 +16,7 @@ export function Hero({src, alt, position = 'center'}: HeroProps) {
           priority
           sizes="100vw"
           className="object-cover"
-          style={{objectPosition: position}}
+          style={{objectPosition: 'center'}}
         />
         {/* <h1 className="absolute inset-x-0 bottom-0">
           <Image

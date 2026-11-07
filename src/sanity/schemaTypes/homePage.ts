@@ -11,7 +11,7 @@ export const homePage = defineType({
       name: 'heroImage',
       title: 'Hero Image',
       type: 'accessibleImage',
-      description: 'Full-screen hero. Focal point comes from the image hotspot.',
+      description: 'Full-screen hero.',
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -27,7 +27,6 @@ export const homePage = defineType({
       title: 'Featured Background',
       type: 'image',
       description: 'Decorative textured background for the Featured Story section.',
-      options: {hotspot: true},
     }),
     defineField({
       name: 'beautifulPeople',

@@ -24,14 +24,14 @@ export type SiteSettings = {
   title?: string;
   tagline?: string;
   footerLinks?: Array<{
-    label: string;
-    href: string;
+    label?: string;
+    href?: string;
     _type: "footerLink";
     _key: string;
   }>;
   connectLinks?: Array<{
-    label: string;
-    href: string;
+    label?: string;
+    href?: string;
     external?: boolean;
     _type: "connectLink";
     _key: string;
@@ -46,7 +46,7 @@ export type AboutPage = {
   _rev: string;
   heading?: string;
   marqueeItems?: Array<{
-    image: AccessibleImage;
+    image?: AccessibleImage;
     rotate?: number;
     _type: "marqueeItem";
     _key: string;
@@ -69,14 +69,14 @@ export type SanityImageAssetReference = {
 
 export type AccessibleImage = {
   _type: "accessibleImage";
-  image: {
+  image?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
   };
-  alt: string;
+  alt?: string;
 };
 
 export type StoryReference = {
@@ -92,8 +92,8 @@ export type HomePage = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  heroImage: AccessibleImage;
-  featuredStory: StoryReference;
+  heroImage?: AccessibleImage;
+  featuredStory?: StoryReference;
   featuredBackground?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -103,8 +103,8 @@ export type HomePage = {
   };
   beautifulPeople?: {
     heading?: string;
-    photos: Array<{
-      image: AccessibleImage;
+    photos?: Array<{
+      image?: AccessibleImage;
       wide?: boolean;
       _type: "beautifulPeoplePhoto";
       _key: string;
@@ -115,18 +115,18 @@ export type HomePage = {
 
 export type SanityImageCrop = {
   _type: "sanity.imageCrop";
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
 };
 
 export type SanityImageHotspot = {
   _type: "sanity.imageHotspot";
-  x: number;
-  y: number;
-  height: number;
-  width: number;
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
 };
 
 export type Story = {
@@ -135,11 +135,11 @@ export type Story = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  title: string;
-  slug: Slug;
-  category: "Photo" | "Essay" | "Film";
-  date: string;
-  cardImage: AccessibleImage;
+  title?: string;
+  slug?: Slug;
+  category?: "Photo" | "Essay" | "Film";
+  date?: string;
+  cardImage?: AccessibleImage;
   hero?: AccessibleImage;
   intro?: string;
   figures?: Array<
@@ -151,7 +151,7 @@ export type Story = {
 
 export type Slug = {
   _type: "slug";
-  current: string;
+  current?: string;
   source?: string;
 };
 
@@ -176,9 +176,9 @@ export type SanityImagePalette = {
 
 export type SanityImageDimensions = {
   _type: "sanity.imageDimensions";
-  height: number;
-  width: number;
-  aspectRatio: number;
+  height?: number;
+  width?: number;
+  aspectRatio?: number;
 };
 
 export type SanityImageMetadata = {
@@ -204,14 +204,14 @@ export type SanityFileAsset = {
   title?: string;
   description?: string;
   altText?: string;
-  sha1hash: string;
-  extension: string;
-  mimeType: string;
-  size: number;
-  assetId: string;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
   uploadId?: string;
-  path: string;
-  url: string;
+  path?: string;
+  url?: string;
   source?: SanityAssetSourceData;
 };
 
@@ -233,14 +233,14 @@ export type SanityImageAsset = {
   title?: string;
   description?: string;
   altText?: string;
-  sha1hash: string;
-  extension: string;
-  mimeType: string;
-  size: number;
-  assetId: string;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
   uploadId?: string;
-  path: string;
-  url: string;
+  path?: string;
+  url?: string;
   metadata?: SanityImageMetadata;
   source?: SanityAssetSourceData;
 };
@@ -286,11 +286,11 @@ export type HOME_PAGE_QUERY_RESULT = {
       }
     | {
         heroImage: {
-          alt: string;
+          alt: string | null;
           image: {
             asset: {
               _id: string;
-              url: string;
+              url: string | null;
               metadata: {
                 lqip: string | null;
                 dimensions: SanityImageDimensions | null;
@@ -298,20 +298,20 @@ export type HOME_PAGE_QUERY_RESULT = {
             } | null;
             hotspot: SanityImageHotspot | null;
             crop: SanityImageCrop | null;
-          };
-        };
+          } | null;
+        } | null;
         featuredStory: {
           _id: string;
-          title: string;
-          slug: string;
-          category: "Essay" | "Film" | "Photo";
-          date: string;
+          title: string | null;
+          slug: string | null;
+          category: "Essay" | "Film" | "Photo" | null;
+          date: string | null;
           cardImage: {
-            alt: string;
+            alt: string | null;
             image: {
               asset: {
                 _id: string;
-                url: string;
+                url: string | null;
                 metadata: {
                   lqip: string | null;
                   dimensions: SanityImageDimensions | null;
@@ -319,13 +319,13 @@ export type HOME_PAGE_QUERY_RESULT = {
               } | null;
               hotspot: SanityImageHotspot | null;
               crop: SanityImageCrop | null;
-            };
-          };
-        };
+            } | null;
+          } | null;
+        } | null;
         featuredBackground: {
           asset: {
             _id: string;
-            url: string;
+            url: string | null;
             metadata: {
               lqip: string | null;
               dimensions: SanityImageDimensions | null;
@@ -340,11 +340,11 @@ export type HOME_PAGE_QUERY_RESULT = {
             _key: string;
             wide: boolean | null;
             image: {
-              alt: string;
+              alt: string | null;
               image: {
                 asset: {
                   _id: string;
-                  url: string;
+                  url: string | null;
                   metadata: {
                     lqip: string | null;
                     dimensions: SanityImageDimensions | null;
@@ -352,16 +352,16 @@ export type HOME_PAGE_QUERY_RESULT = {
                 } | null;
                 hotspot: SanityImageHotspot | null;
                 crop: SanityImageCrop | null;
-              };
-            };
-          }>;
+              } | null;
+            } | null;
+          }> | null;
         } | null;
         imageBreak: {
-          alt: string;
+          alt: string | null;
           image: {
             asset: {
               _id: string;
-              url: string;
+              url: string | null;
               metadata: {
                 lqip: string | null;
                 dimensions: SanityImageDimensions | null;
@@ -369,22 +369,22 @@ export type HOME_PAGE_QUERY_RESULT = {
             } | null;
             hotspot: SanityImageHotspot | null;
             crop: SanityImageCrop | null;
-          };
+          } | null;
         } | null;
       }
     | null;
   recentStories: Array<{
     _id: string;
-    title: string;
-    slug: string;
-    category: "Essay" | "Film" | "Photo";
-    date: string;
+    title: string | null;
+    slug: string | null;
+    category: "Essay" | "Film" | "Photo" | null;
+    date: string | null;
     cardImage: {
-      alt: string;
+      alt: string | null;
       image: {
         asset: {
           _id: string;
-          url: string;
+          url: string | null;
           metadata: {
             lqip: string | null;
             dimensions: SanityImageDimensions | null;
@@ -392,8 +392,8 @@ export type HOME_PAGE_QUERY_RESULT = {
         } | null;
         hotspot: SanityImageHotspot | null;
         crop: SanityImageCrop | null;
-      };
-    };
+      } | null;
+    } | null;
   }>;
 };
 
@@ -402,16 +402,16 @@ export type HOME_PAGE_QUERY_RESULT = {
 // Query: *[_type == "story"] | order(date desc) {      _id,  title,  "slug": slug.current,  category,  date,  cardImage {      alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }  }  }
 export type ARCHIVE_PAGE_QUERY_RESULT = Array<{
   _id: string;
-  title: string;
-  slug: string;
-  category: "Essay" | "Film" | "Photo";
-  date: string;
+  title: string | null;
+  slug: string | null;
+  category: "Essay" | "Film" | "Photo" | null;
+  date: string | null;
   cardImage: {
-    alt: string;
+    alt: string | null;
     image: {
       asset: {
         _id: string;
-        url: string;
+        url: string | null;
         metadata: {
           lqip: string | null;
           dimensions: SanityImageDimensions | null;
@@ -419,15 +419,15 @@ export type ARCHIVE_PAGE_QUERY_RESULT = Array<{
       } | null;
       hotspot: SanityImageHotspot | null;
       crop: SanityImageCrop | null;
-    };
-  };
+    } | null;
+  } | null;
 }>;
 
 // Source: src/sanity/lib/queries.ts
 // Variable: STORY_SLUGS_QUERY
 // Query: *[_type == "story" && defined(slug.current)]{    "slug": slug.current  }
 export type STORY_SLUGS_QUERY_RESULT = Array<{
-  slug: string;
+  slug: string | null;
 }>;
 
 // Source: src/sanity/lib/queries.ts
@@ -435,17 +435,17 @@ export type STORY_SLUGS_QUERY_RESULT = Array<{
 // Query: *[_type == "story" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    category,    date,    intro,    cardImage {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    },    hero {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    },    figures[] {      _key,        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    }  }
 export type STORY_BY_SLUG_QUERY_RESULT = {
   _id: string;
-  title: string;
-  slug: string;
-  category: "Essay" | "Film" | "Photo";
-  date: string;
+  title: string | null;
+  slug: string | null;
+  category: "Essay" | "Film" | "Photo" | null;
+  date: string | null;
   intro: string | null;
   cardImage: {
-    alt: string;
+    alt: string | null;
     image: {
       asset: {
         _id: string;
-        url: string;
+        url: string | null;
         metadata: {
           lqip: string | null;
           dimensions: SanityImageDimensions | null;
@@ -453,14 +453,14 @@ export type STORY_BY_SLUG_QUERY_RESULT = {
       } | null;
       hotspot: SanityImageHotspot | null;
       crop: SanityImageCrop | null;
-    };
-  };
+    } | null;
+  } | null;
   hero: {
-    alt: string;
+    alt: string | null;
     image: {
       asset: {
         _id: string;
-        url: string;
+        url: string | null;
         metadata: {
           lqip: string | null;
           dimensions: SanityImageDimensions | null;
@@ -468,15 +468,15 @@ export type STORY_BY_SLUG_QUERY_RESULT = {
       } | null;
       hotspot: SanityImageHotspot | null;
       crop: SanityImageCrop | null;
-    };
+    } | null;
   } | null;
   figures: Array<{
     _key: string;
-    alt: string;
+    alt: string | null;
     image: {
       asset: {
         _id: string;
-        url: string;
+        url: string | null;
         metadata: {
           lqip: string | null;
           dimensions: SanityImageDimensions | null;
@@ -484,7 +484,7 @@ export type STORY_BY_SLUG_QUERY_RESULT = {
       } | null;
       hotspot: SanityImageHotspot | null;
       crop: SanityImageCrop | null;
-    };
+    } | null;
   }> | null;
 } | null;
 
@@ -509,11 +509,11 @@ export type ABOUT_PAGE_QUERY_RESULT =
         _key: string;
         rotate: number | null;
         image: {
-          alt: string;
+          alt: string | null;
           image: {
             asset: {
               _id: string;
-              url: string;
+              url: string | null;
               metadata: {
                 lqip: string | null;
                 dimensions: SanityImageDimensions | null;
@@ -521,18 +521,18 @@ export type ABOUT_PAGE_QUERY_RESULT =
             } | null;
             hotspot: SanityImageHotspot | null;
             crop: SanityImageCrop | null;
-          };
-        };
+          } | null;
+        } | null;
       }> | null;
       whyHeading: string | null;
       whyText: string | null;
       contactHeading: string | null;
       contactImage: {
-        alt: string;
+        alt: string | null;
         image: {
           asset: {
             _id: string;
-            url: string;
+            url: string | null;
             metadata: {
               lqip: string | null;
               dimensions: SanityImageDimensions | null;
@@ -540,7 +540,7 @@ export type ABOUT_PAGE_QUERY_RESULT =
           } | null;
           hotspot: SanityImageHotspot | null;
           crop: SanityImageCrop | null;
-        };
+        } | null;
       } | null;
       contactIntro: string | null;
       contactOutro: string | null;
@@ -559,12 +559,6 @@ export type SITE_SETTINGS_QUERY_RESULT =
       connectLinks: null;
     }
   | {
-      title: string;
-      tagline: null;
-      footerLinks: null;
-      connectLinks: null;
-    }
-  | {
       title: string | null;
       tagline: null;
       footerLinks: null;
@@ -575,13 +569,13 @@ export type SITE_SETTINGS_QUERY_RESULT =
       tagline: string | null;
       footerLinks: Array<{
         _key: string;
-        label: string;
-        href: string;
+        label: string | null;
+        href: string | null;
       }> | null;
       connectLinks: Array<{
         _key: string;
-        label: string;
-        href: string;
+        label: string | null;
+        href: string | null;
         external: boolean | null;
       }> | null;
     }

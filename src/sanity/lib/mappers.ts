@@ -26,7 +26,6 @@ export function toStoryCardItem(story: StoryCardSource | null | undefined): Stor
     date: story.date,
     image: image.src,
     alt: image.alt,
-    objectPosition: image.objectPosition,
   }
 }
 

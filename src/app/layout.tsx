@@ -4,14 +4,14 @@ import {Poppins} from 'next/font/google'
 import {draftMode} from 'next/headers'
 
 import {VisualEditing} from 'next-sanity/visual-editing'
-import { defineQuery } from 'next-sanity'
+
 
 import Footer from '@/components/footer'
 import Navbar from '@/components/navbar'
 
 import {toFooterLinks} from '@/sanity/lib/mappers'
 import {SITE_SETTINGS_QUERY} from '@/sanity/lib/queries'
-import { urlForOpenGraphImage } from '@/sanity/lib/utils'
+
 import { sanityFetch } from '@/sanity/lib/live'
 
 

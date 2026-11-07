@@ -12,20 +12,22 @@ import {
 } from '@/sanity/lib/mappers'
 import {resolveAccessibleImage} from '@/sanity/lib/image'
 import {HOME_PAGE_QUERY} from '@/sanity/lib/queries'
+import { notFound } from 'next/navigation'
 
 export default async function Home(){
   const {data} = await sanityFetch({query: HOME_PAGE_QUERY})
-  const home = data?.home
+  const home = data.home
+  if (!home) notFound()
   const recentStories = toStoryCardItems(data?.recentStories)
 
   const hero = resolveAccessibleImage(home.heroImage, 2400)
   const featured = toFeaturedStory(home?.featuredStory, home?.featuredBackground)
   const beautifulPeoplePhotos = toBeautifulPeoplePhotos(home?.beautifulPeople?.photos)
-  const imageBreak = resolveAccessibleImage(home?.imageBreak, 2000)
+  const imageBreak = resolveAccessibleImage(home.imageBreak, 2000)
 
   return (
     <main>
-      {hero ? <Hero src={hero.src} alt={hero.alt} position={hero.objectPosition} /> : null}
+      {hero ? <Hero src={hero.src} alt={hero.alt} /> : null}
       <StoryCards items={recentStories} />
       <ViewAll />
       {featured ? <FeaturedStory story={featured} /> : null}
@@ -37,7 +39,6 @@ export default async function Home(){
         <ImageBreak
           src={imageBreak.src}
           alt={imageBreak.alt}
-          position={imageBreak.objectPosition}
         />
       ) : null}
     </main>

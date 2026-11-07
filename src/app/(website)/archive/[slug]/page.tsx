@@ -74,7 +74,7 @@ export default async function StoryPage(props: PageProps<'/archive/[slug]'>) {
               priority
               sizes="100vw"
               className="object-cover"
-              style={hero.objectPosition ? {objectPosition: hero.objectPosition} : undefined}
+              style={{objectPosition: 'center'}}
             />
           </div>
         </section>
@@ -98,7 +98,6 @@ export default async function StoryPage(props: PageProps<'/archive/[slug]'>) {
             alt={image.alt}
             title={story.title}
             meta={meta}
-            objectPosition={image.objectPosition}
           />
         )
       })}
