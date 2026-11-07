@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'cdn.sanity.io',
       },
+      {
+        // Placeholder images — remove once Sanity data is wired up
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
   },
 }

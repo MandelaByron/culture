@@ -56,7 +56,6 @@ export default async function StoryPage(props: PageProps<'/archive/[slug]'>) {
   const heroSource = story.hero ?? story.cardImage
   const hero = resolveAccessibleImage(heroSource, 2400)
   const meta = `${story.category} · ${formatDate(story.date)}`
-  const more = toStoryCardItems(allStories).filter((item) => item.slug !== story.slug).slice(0, 4)
 
   return (
     <main className="bg-grain min-h-svh text-white [--grain-base:#161616]">
@@ -125,7 +124,6 @@ export default async function StoryPage(props: PageProps<'/archive/[slug]'>) {
         )
       })}
 
-      <StoryCards items={more} />
     </main>
   )
 }
