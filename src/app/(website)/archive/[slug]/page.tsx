@@ -26,8 +26,12 @@ import {
 //     .map((slug) => ({slug}))
 // }
 
+type StoryPageProps = {
+  params: Promise<{slug: string}>
+}
+
 export async function generateMetadata(
-  props: PageProps<'/archive/[slug]'>,
+  props: StoryPageProps,
 ): Promise<Metadata> {
   const {slug} = await props.params
   const {data: story} = await sanityFetch({
@@ -44,7 +48,7 @@ export async function generateMetadata(
   }
 }
 
-export default async function StoryPage(props: PageProps<'/archive/[slug]'>) {
+export default async function StoryPage(props: StoryPageProps) {
   const {slug} = await props.params
   const [{data: story}, {data: allStories}] = await Promise.all([
     sanityFetch({query: STORY_BY_SLUG_QUERY, params: {slug}, stega: false}),
@@ -55,7 +59,9 @@ export default async function StoryPage(props: PageProps<'/archive/[slug]'>) {
 
   const heroSource = story.hero ?? story.cardImage
   const hero = resolveAccessibleImage(heroSource, 2400)
-  const meta = `${story.category} · ${formatDate(story.date)}`
+  const meta = [story.category, story.date ? formatDate(story.date) : null]
+    .filter(Boolean)
+    .join(' · ')
 
   return (
     <main className="bg-grain min-h-svh text-white [--grain-base:#161616]">
@@ -116,7 +122,7 @@ export default async function StoryPage(props: PageProps<'/archive/[slug]'>) {
             key={figure._key}
             image={image.src}
             alt={image.alt}
-            title={story.title}
+            title={story.title ?? 'Untitled'}
             meta={meta}
             naturalWidth={image.naturalWidth}
             naturalHeight={image.naturalHeight}

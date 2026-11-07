@@ -1,4 +1,6 @@
 import type {StoryCardItem} from '@/components/story-cards'
+import type {CategoryCard} from '@/components/home-categories'
+import type {FeaturedStoryCard} from '@/components/featured-stories'
 import type {BeautifulPeoplePhoto} from '@/components/beautiful_people'
 import type {FeaturedStoryData} from '@/components/featurestory'
 import type {AboutMarqueeItem} from '@/components/about-marquee'
@@ -35,6 +37,77 @@ export function toStoryCardItems(
   const items: StoryCardItem[] = []
   for (const story of stories ?? []) {
     const item = toStoryCardItem(story)
+    if (item) items.push(item)
+  }
+  return items
+}
+
+type CategoryCardSource = {
+  slug?: string | null
+  title?: string | null
+  description?: string | null
+  image?: Parameters<typeof resolveAccessibleImage>[0]
+}
+
+export function toCategoryCardItem(category: CategoryCardSource | null | undefined): CategoryCard | null {
+  if (!category?.slug || !category.title || !category.image) return null
+
+  const resolved = resolveAccessibleImage(category.image, 800)
+  if (!resolved) return null
+
+  return {
+    slug: category.slug,
+    label: category.title,
+    description: category.description ?? '',
+    image: resolved.src,
+    alt: resolved.alt || category.title,
+  }
+}
+
+export function toCategoryCardItems(
+  categories: Array<CategoryCardSource | null | undefined> | null | undefined,
+): CategoryCard[] {
+  const items: CategoryCard[] = []
+  for (const cat of categories ?? []) {
+    const item = toCategoryCardItem(cat)
+    if (item) items.push(item)
+  }
+  return items
+}
+
+type FeaturedStoryCardSource = {
+  slug?: string | null
+  title?: string | null
+  category?: string | null
+  description?: string | null
+  date?: string | null
+  cardImage?: Parameters<typeof resolveAccessibleImage>[0]
+}
+
+export function toFeaturedStoryCardItem(
+  story: FeaturedStoryCardSource | null | undefined,
+): FeaturedStoryCard | null {
+  if (!story?.slug || !story.title) return null
+
+  const resolved = resolveAccessibleImage(story.cardImage, 1200)
+  if (!resolved) return null
+
+  return {
+    slug: story.slug,
+    title: story.title,
+    description: story.description ?? '',
+    category: story.category ?? 'Story',
+    image: resolved.src,
+    alt: resolved.alt || story.title,
+  }
+}
+
+export function toFeaturedStoryCards(
+  stories: Array<FeaturedStoryCardSource | null | undefined> | null | undefined,
+): FeaturedStoryCard[] {
+  const items: FeaturedStoryCard[] = []
+  for (const story of stories ?? []) {
+    const item = toFeaturedStoryCardItem(story)
     if (item) items.push(item)
   }
   return items

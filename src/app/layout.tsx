@@ -28,17 +28,18 @@ export const metadata: Metadata = {
   description: "Engineer and writer.",
 };
 
-export default async function RootLayout({children}: LayoutProps<'/'>) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const {isEnabled: isDraftMode} = await draftMode()
   const {data} = await sanityFetch({query: SITE_SETTINGS_QUERY})
 
   const title = data?.title ?? 'Grain Archive'
   const tagline = data?.tagline ?? 'Words, images, and signals from the edge'
   const footerLinks = toFooterLinks(data?.footerLinks)
-  const connectLinks = (data?.connectLinks ?? []).map((link) => ({
-    ...link,
-    external: link.external ?? false,
-  }))
+  const connectLinks = toFooterLinks(data?.connectLinks)
 
   return (
     <html lang="en" className={`${poppins.variable} h-full antialiased`}>

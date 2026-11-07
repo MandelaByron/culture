@@ -12,9 +12,10 @@ export type FeaturedStoryCard = {
 
 type FeaturedStoriesProps = {
   items: FeaturedStoryCard[]
+  heading?: string
 }
 
-export function FeaturedStories({items}: FeaturedStoriesProps) {
+export function FeaturedStories({items, heading = 'Featured Stories'}: FeaturedStoriesProps) {
   if (!items.length) return null
 
   return (
@@ -22,7 +23,7 @@ export function FeaturedStories({items}: FeaturedStoriesProps) {
       <div className="mx-auto max-w-6xl">
         {/* Section heading */}
         <h2 className="mb-8 font-serif text-3xl font-medium tracking-tight text-white sm:text-4xl">
-          Featured Stories
+          {heading}
         </h2>
 
         {/* Grid: 1 col mobile → 2 col tablet → 3 col desktop */}

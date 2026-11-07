@@ -1,33 +1,30 @@
 import {defineQuery} from 'next-sanity'
 
-import {accessibleImageFragment, imageAssetFragment, storyCardFragment} from './fragments'
+import {
+  accessibleImageFragment,
+  categoryCardFragment,
+  storyCardFragment,
+} from './fragments'
 
 export const HOME_PAGE_QUERY = defineQuery(/* groq */ `{
   "home": *[_id == "homePage"][0]{
-    heroImage {
+    heroVideoUrl,
+    heroVideoPoster {
       ${accessibleImageFragment}
     },
-    featuredStory->{
+    categoriesHeading,
+    categories[]->{
+      ${categoryCardFragment}
+    },
+    featuredStoriesHeading,
+    featuredStories[]->{
       ${storyCardFragment}
-    },
-    featuredBackground {
-      ${imageAssetFragment}
-    },
-    beautifulPeople {
-      heading,
-      photos[] {
-        _key,
-        wide,
-        image {
-          ${accessibleImageFragment}
-        }
-      }
-    },
-    imageBreak {
-      ${accessibleImageFragment}
     }
   },
-  "recentStories": *[_type == "story"] | order(date desc) [0...4] {
+  "allCategories": *[_type == "category"] | order(title asc) {
+    ${categoryCardFragment}
+  },
+  "recentStories": *[_type == "story"] | order(date desc) [0...12] {
     ${storyCardFragment}
   }
 }`)
@@ -49,9 +46,10 @@ export const STORY_BY_SLUG_QUERY = defineQuery(/* groq */ `
     _id,
     title,
     "slug": slug.current,
-    category,
+    "category": coalesce(category->title, category),
     date,
     intro,
+    description,
     cardImage {
       ${accessibleImageFragment}
     },

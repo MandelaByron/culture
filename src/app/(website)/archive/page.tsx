@@ -1,6 +1,6 @@
 import type {Metadata} from 'next'
 import {StoryCards} from '@/components/story-cards'
-import {sanityFetch,sanityFetchMetadata} from '@/sanity/lib/live'
+import {sanityFetch} from '@/sanity/lib/live'
 import {toStoryCardItems} from '@/sanity/lib/mappers'
 import {ARCHIVE_PAGE_QUERY, SITE_SETTINGS_QUERY} from '@/sanity/lib/queries'
 

@@ -1,18 +1,19 @@
-import HomeCategories, {type CategoryCard} from '@/components/home-categories'
-import FeaturedStories, {type FeaturedStoryCard} from '@/components/featured-stories'
+import HomeCategories from '@/components/home-categories'
+import FeaturedStories from '@/components/featured-stories'
 import HeroVideo from '@/components/hero-video'
 import {sanityFetch} from '@/sanity/lib/live'
 import {HOME_PAGE_QUERY} from '@/sanity/lib/queries'
+import {toCategoryCardItems, toFeaturedStoryCards} from '@/sanity/lib/mappers'
 import {notFound} from 'next/navigation'
 
-// ── Hero video — paste your URL here (or leave this sample for preview) ───────
-const HERO_VIDEO_URL =
+// ── Hero video fallback URL ───────────────────────────────────────────────────
+const HERO_VIDEO_FALLBACK =
   'https://museumplatform.b-cdn.net/files/r35o2ddl/production/7f1c5182d3443bddaebabd46292e71ba9e5037d6.mp4'
 // ──────────────────────────────────────────────────────────────────────────────
 
-// ── Placeholder data (replace with Sanity queries when types are ready) ────────
-
-const PLACEHOLDER_CATEGORIES: CategoryCard[] = [
+/*
+// ── Placeholder Categories (commented out as requested, kept for reference) ────
+const PLACEHOLDER_CATEGORIES = [
   {
     slug: 'photo',
     label: 'Photo',
@@ -43,7 +44,8 @@ const PLACEHOLDER_CATEGORIES: CategoryCard[] = [
   },
 ]
 
-const PLACEHOLDER_STORIES: FeaturedStoryCard[] = [
+// ── Placeholder Stories (commented out as requested, kept for reference) ───────
+const PLACEHOLDER_STORIES = [
   {slug: 'the-last-light', title: 'The Last Light of Summer', description: 'A photographer chases dusk across three continents in search of the perfect vanishing moment.', image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80', alt: 'Sunset over open water', category: 'Photo'},
   {slug: 'quiet-machines', title: 'Quiet Machines', description: 'Inside the factories that still make things by hand — and the people who refuse to let them die.', image: 'https://images.unsplash.com/photo-1565035010268-a3816f98589a?w=800&q=80', alt: 'Craftsman at work in a workshop', category: 'Essay'},
   {slug: 'borderline', title: 'Borderline', description: 'A road trip essay across a frontier that exists on maps but not in memory.', image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&q=80', alt: 'Empty road through a desert landscape', category: 'Essay'},
@@ -57,24 +59,43 @@ const PLACEHOLDER_STORIES: FeaturedStoryCard[] = [
   {slug: 'cut-to-black', title: 'Cut to Black', description: 'The cinematographers who shaped African cinema, in their own words.', image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80', alt: 'Director looking through a camera viewfinder', category: 'Film'},
   {slug: 'found-objects', title: 'Found Objects', description: 'Street photography as archaeology — picking up what the city drops.', image: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80', alt: 'Urban street scene with scattered objects', category: 'Culture'},
 ]
-
-// ──────────────────────────────────────────────────────────────────────────────
+*/
 
 export default async function Home() {
   const {data} = await sanityFetch({query: HOME_PAGE_QUERY})
-  const home = data.home
+  const home = data?.home
   if (!home) notFound()
+
+  const videoUrl = home.heroVideoUrl || HERO_VIDEO_FALLBACK
+
+  // Categories: curated in homePage document, or fallback to all published categories
+  const categoriesSource =
+    home.categories && home.categories.length > 0 ? home.categories : data.allCategories
+  const categories = toCategoryCardItems(categoriesSource)
+
+  // Featured stories: curated in homePage document, or fallback to recent published stories
+  const storiesSource =
+    home.featuredStories && home.featuredStories.length > 0
+      ? home.featuredStories
+      : data.recentStories
+  const featuredStories = toFeaturedStoryCards(storiesSource)
 
   return (
     <main className="bg-grain min-h-svh text-white [--grain-base:#161616]">
       {/* ── Hero Video — reaches top of page; floating navbar sits above it ── */}
-      <HeroVideo src={HERO_VIDEO_URL} />
+      <HeroVideo src={videoUrl} />
 
       {/* ── Categories ─────────────────────────────────────────────────── */}
-      <HomeCategories items={PLACEHOLDER_CATEGORIES} />
+      <HomeCategories
+        items={categories}
+        heading={home.categoriesHeading ?? 'What interests you?'}
+      />
 
       {/* ── Featured Stories ───────────────────────────────────────────── */}
-      <FeaturedStories items={PLACEHOLDER_STORIES} />
+      <FeaturedStories
+        items={featuredStories}
+        heading={home.featuredStoriesHeading ?? 'Featured Stories'}
+      />
     </main>
   )
 }

@@ -3,6 +3,7 @@ import {BookIcon} from '@sanity/icons/Book'
 import {CogIcon} from '@sanity/icons/Cog'
 import {HomeIcon} from '@sanity/icons/Home'
 import {InfoOutlineIcon} from '@sanity/icons/InfoOutline'
+import {TagIcon} from '@sanity/icons/Tag'
 
 // https://www.sanity.io/docs/structure-builder-cheat-sheet
 export const structure: StructureResolver = (S) =>
@@ -27,6 +28,15 @@ export const structure: StructureResolver = (S) =>
           S.document().schemaType('siteSettings').documentId('siteSettings').title('Site Settings'),
         ),
       S.divider(),
+      S.listItem()
+        .title('Categories')
+        .icon(TagIcon)
+        .schemaType('category')
+        .child(
+          S.documentTypeList('category')
+            .title('Categories')
+            .defaultOrdering([{field: 'title', direction: 'asc'}]),
+        ),
       S.listItem()
         .title('Stories')
         .icon(BookIcon)

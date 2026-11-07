@@ -17,6 +17,8 @@ export type ResolvedImage = {
   naturalWidth: number | null
   /** Intrinsic pixel height from Sanity asset metadata — use as next/image `height` prop. */
   naturalHeight: number | null
+  /** Optional object-position CSS value derived from hotspot (e.g. "50% 50%") */
+  objectPosition?: string
 }
 
 type AccessibleImageLike = {
@@ -27,11 +29,12 @@ type AccessibleImageLike = {
         dimensions?: {width?: number | null; height?: number | null} | null
       } | null
     } | null
+    hotspot?: {x?: number | null; y?: number | null} | null
   }) | null
 } | null
 
 export function resolveAccessibleImage(
-  value: AccessibleImageLike,
+  value: AccessibleImageLike | undefined,
   width = 1600,
 ): ResolvedImage | null {
   if (!value?.image) return null
@@ -39,13 +42,23 @@ export function resolveAccessibleImage(
   const src = urlFor(value.image).width(width).fit('max').url()
   if (!src) return null
 
-  const dims = (value.image as {asset?: {metadata?: {dimensions?: {width?: number | null; height?: number | null} | null} | null} | null})?.asset?.metadata?.dimensions
+  const imgObj = value.image as {
+    asset?: {metadata?: {dimensions?: {width?: number | null; height?: number | null} | null} | null} | null
+    hotspot?: {x?: number | null; y?: number | null} | null
+  }
+  const dims = imgObj?.asset?.metadata?.dimensions
+  const hotspot = imgObj?.hotspot
+  const objectPosition =
+    typeof hotspot?.x === 'number' && typeof hotspot?.y === 'number'
+      ? `${Math.round(hotspot.x * 100)}% ${Math.round(hotspot.y * 100)}%`
+      : undefined
 
   return {
     src,
     alt: value.alt ?? '',
     naturalWidth: dims?.width ?? null,
     naturalHeight: dims?.height ?? null,
+    objectPosition,
   }
 }
 

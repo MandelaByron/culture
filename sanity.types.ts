@@ -24,14 +24,14 @@ export type SiteSettings = {
   title?: string;
   tagline?: string;
   footerLinks?: Array<{
-    label?: string;
-    href?: string;
+    label: string;
+    href: string;
     _type: "footerLink";
     _key: string;
   }>;
   connectLinks?: Array<{
-    label?: string;
-    href?: string;
+    label: string;
+    href: string;
     external?: boolean;
     _type: "connectLink";
     _key: string;
@@ -46,7 +46,7 @@ export type AboutPage = {
   _rev: string;
   heading?: string;
   marqueeItems?: Array<{
-    image?: AccessibleImage;
+    image: AccessibleImage;
     rotate?: number;
     _type: "marqueeItem";
     _key: string;
@@ -69,14 +69,21 @@ export type SanityImageAssetReference = {
 
 export type AccessibleImage = {
   _type: "accessibleImage";
-  image?: {
+  image: {
     asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
   };
-  alt?: string;
+  alt: string;
+};
+
+export type CategoryReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "category";
 };
 
 export type StoryReference = {
@@ -92,41 +99,20 @@ export type HomePage = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  heroImage?: AccessibleImage;
-  featuredStory?: StoryReference;
-  featuredBackground?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
-  beautifulPeople?: {
-    heading?: string;
-    photos?: Array<{
-      image?: AccessibleImage;
-      wide?: boolean;
-      _type: "beautifulPeoplePhoto";
+  heroVideoUrl?: string;
+  heroVideoPoster?: AccessibleImage;
+  categoriesHeading?: string;
+  categories?: Array<
+    {
       _key: string;
-    }>;
-  };
-  imageBreak?: AccessibleImage;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
+    } & CategoryReference
+  >;
+  featuredStoriesHeading?: string;
+  featuredStories?: Array<
+    {
+      _key: string;
+    } & StoryReference
+  >;
 };
 
 export type Story = {
@@ -135,11 +121,12 @@ export type Story = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  title?: string;
-  slug?: Slug;
-  category?: "Photo" | "Essay" | "Film";
-  date?: string;
-  cardImage?: AccessibleImage;
+  title: string;
+  slug: Slug;
+  category: CategoryReference;
+  date: string;
+  description?: string;
+  cardImage: AccessibleImage;
   hero?: AccessibleImage;
   intro?: string;
   figures?: Array<
@@ -151,8 +138,36 @@ export type Story = {
 
 export type Slug = {
   _type: "slug";
-  current?: string;
+  current: string;
   source?: string;
+};
+
+export type Category = {
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  description: string;
+  image: AccessibleImage;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x: number;
+  y: number;
+  height: number;
+  width: number;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -176,9 +191,9 @@ export type SanityImagePalette = {
 
 export type SanityImageDimensions = {
   _type: "sanity.imageDimensions";
-  height?: number;
-  width?: number;
-  aspectRatio?: number;
+  height: number;
+  width: number;
+  aspectRatio: number;
 };
 
 export type SanityImageMetadata = {
@@ -204,14 +219,14 @@ export type SanityFileAsset = {
   title?: string;
   description?: string;
   altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
+  sha1hash: string;
+  extension: string;
+  mimeType: string;
+  size: number;
+  assetId: string;
   uploadId?: string;
-  path?: string;
-  url?: string;
+  path: string;
+  url: string;
   source?: SanityAssetSourceData;
 };
 
@@ -233,14 +248,14 @@ export type SanityImageAsset = {
   title?: string;
   description?: string;
   altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
+  sha1hash: string;
+  extension: string;
+  mimeType: string;
+  size: number;
+  assetId: string;
   uploadId?: string;
-  path?: string;
-  url?: string;
+  path: string;
+  url: string;
   metadata?: SanityImageMetadata;
   source?: SanityAssetSourceData;
 };
@@ -257,12 +272,14 @@ export type AllSanitySchemaTypes =
   | AboutPage
   | SanityImageAssetReference
   | AccessibleImage
+  | CategoryReference
   | StoryReference
   | HomePage
-  | SanityImageCrop
-  | SanityImageHotspot
   | Story
   | Slug
+  | Category
+  | SanityImageCrop
+  | SanityImageHotspot
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -274,23 +291,25 @@ export type AllSanitySchemaTypes =
 
 // Source: src/sanity/lib/queries.ts
 // Variable: HOME_PAGE_QUERY
-// Query: {  "home": *[_id == "homePage"][0]{    heroImage {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    },    featuredStory->{        _id,  title,  "slug": slug.current,  category,  date,  cardImage {      alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }  }    },    featuredBackground {        asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop    },    beautifulPeople {      heading,      photos[] {        _key,        wide,        image {            alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }        }      }    },    imageBreak {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    }  },  "recentStories": *[_type == "story"] | order(date desc) [0...4] {      _id,  title,  "slug": slug.current,  category,  date,  cardImage {      alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }  }  }}
+// Query: {  "home": *[_id == "homePage"][0]{    heroVideoUrl,    heroVideoPoster {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    },    categoriesHeading,    categories[]->{        _id,  title,  "slug": slug.current,  description,  image {      alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }  }    },    featuredStoriesHeading,    featuredStories[]->{        _id,  title,  "slug": slug.current,  "category": coalesce(category->title, category),  date,  "description": coalesce(description, intro),  cardImage {      alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }  }    }  },  "allCategories": *[_type == "category"] | order(title asc) {      _id,  title,  "slug": slug.current,  description,  image {      alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }  }  },  "recentStories": *[_type == "story"] | order(date desc) [0...12] {      _id,  title,  "slug": slug.current,  "category": coalesce(category->title, category),  date,  "description": coalesce(description, intro),  cardImage {      alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }  }  }}
 export type HOME_PAGE_QUERY_RESULT = {
   home:
     | {
-        heroImage: null;
-        featuredStory: null;
-        featuredBackground: null;
-        beautifulPeople: null;
-        imageBreak: null;
+        heroVideoUrl: null;
+        heroVideoPoster: null;
+        categoriesHeading: null;
+        categories: null;
+        featuredStoriesHeading: null;
+        featuredStories: null;
       }
     | {
-        heroImage: {
-          alt: string | null;
+        heroVideoUrl: string | null;
+        heroVideoPoster: {
+          alt: string;
           image: {
             asset: {
               _id: string;
-              url: string | null;
+              url: string;
               metadata: {
                 lqip: string | null;
                 dimensions: SanityImageDimensions | null;
@@ -298,20 +317,20 @@ export type HOME_PAGE_QUERY_RESULT = {
             } | null;
             hotspot: SanityImageHotspot | null;
             crop: SanityImageCrop | null;
-          } | null;
+          };
         } | null;
-        featuredStory: {
+        categoriesHeading: string | null;
+        categories: Array<{
           _id: string;
-          title: string | null;
-          slug: string | null;
-          category: "Essay" | "Film" | "Photo" | null;
-          date: string | null;
-          cardImage: {
-            alt: string | null;
+          title: string;
+          slug: string;
+          description: string;
+          image: {
+            alt: string;
             image: {
               asset: {
                 _id: string;
-                url: string | null;
+                url: string;
                 metadata: {
                   lqip: string | null;
                   dimensions: SanityImageDimensions | null;
@@ -319,72 +338,46 @@ export type HOME_PAGE_QUERY_RESULT = {
               } | null;
               hotspot: SanityImageHotspot | null;
               crop: SanityImageCrop | null;
-            } | null;
-          } | null;
-        } | null;
-        featuredBackground: {
-          asset: {
-            _id: string;
-            url: string | null;
-            metadata: {
-              lqip: string | null;
-              dimensions: SanityImageDimensions | null;
-            } | null;
-          } | null;
-          hotspot: SanityImageHotspot | null;
-          crop: SanityImageCrop | null;
-        } | null;
-        beautifulPeople: {
-          heading: string | null;
-          photos: Array<{
-            _key: string;
-            wide: boolean | null;
+            };
+          };
+        }> | null;
+        featuredStoriesHeading: string | null;
+        featuredStories: Array<{
+          _id: string;
+          title: string;
+          slug: string;
+          category: string;
+          date: string;
+          description: string | null;
+          cardImage: {
+            alt: string;
             image: {
-              alt: string | null;
-              image: {
-                asset: {
-                  _id: string;
-                  url: string | null;
-                  metadata: {
-                    lqip: string | null;
-                    dimensions: SanityImageDimensions | null;
-                  } | null;
+              asset: {
+                _id: string;
+                url: string;
+                metadata: {
+                  lqip: string | null;
+                  dimensions: SanityImageDimensions | null;
                 } | null;
-                hotspot: SanityImageHotspot | null;
-                crop: SanityImageCrop | null;
               } | null;
-            } | null;
-          }> | null;
-        } | null;
-        imageBreak: {
-          alt: string | null;
-          image: {
-            asset: {
-              _id: string;
-              url: string | null;
-              metadata: {
-                lqip: string | null;
-                dimensions: SanityImageDimensions | null;
-              } | null;
-            } | null;
-            hotspot: SanityImageHotspot | null;
-            crop: SanityImageCrop | null;
-          } | null;
-        } | null;
+              hotspot: SanityImageHotspot | null;
+              crop: SanityImageCrop | null;
+            };
+          };
+        }> | null;
       }
     | null;
-  recentStories: Array<{
+  allCategories: Array<{
     _id: string;
-    title: string | null;
-    slug: string | null;
-    category: "Essay" | "Film" | "Photo" | null;
-    date: string | null;
-    cardImage: {
-      alt: string | null;
+    title: string;
+    slug: string;
+    description: string;
+    image: {
+      alt: string;
       image: {
         asset: {
           _id: string;
-          url: string | null;
+          url: string;
           metadata: {
             lqip: string | null;
             dimensions: SanityImageDimensions | null;
@@ -392,26 +385,50 @@ export type HOME_PAGE_QUERY_RESULT = {
         } | null;
         hotspot: SanityImageHotspot | null;
         crop: SanityImageCrop | null;
-      } | null;
-    } | null;
+      };
+    };
+  }>;
+  recentStories: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+    category: string;
+    date: string;
+    description: string | null;
+    cardImage: {
+      alt: string;
+      image: {
+        asset: {
+          _id: string;
+          url: string;
+          metadata: {
+            lqip: string | null;
+            dimensions: SanityImageDimensions | null;
+          } | null;
+        } | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+      };
+    };
   }>;
 };
 
 // Source: src/sanity/lib/queries.ts
 // Variable: ARCHIVE_PAGE_QUERY
-// Query: *[_type == "story"] | order(date desc) {      _id,  title,  "slug": slug.current,  category,  date,  cardImage {      alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }  }  }
+// Query: *[_type == "story"] | order(date desc) {      _id,  title,  "slug": slug.current,  "category": coalesce(category->title, category),  date,  "description": coalesce(description, intro),  cardImage {      alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }  }  }
 export type ARCHIVE_PAGE_QUERY_RESULT = Array<{
   _id: string;
-  title: string | null;
-  slug: string | null;
-  category: "Essay" | "Film" | "Photo" | null;
-  date: string | null;
+  title: string;
+  slug: string;
+  category: string;
+  date: string;
+  description: string | null;
   cardImage: {
-    alt: string | null;
+    alt: string;
     image: {
       asset: {
         _id: string;
-        url: string | null;
+        url: string;
         metadata: {
           lqip: string | null;
           dimensions: SanityImageDimensions | null;
@@ -419,33 +436,34 @@ export type ARCHIVE_PAGE_QUERY_RESULT = Array<{
       } | null;
       hotspot: SanityImageHotspot | null;
       crop: SanityImageCrop | null;
-    } | null;
-  } | null;
+    };
+  };
 }>;
 
 // Source: src/sanity/lib/queries.ts
 // Variable: STORY_SLUGS_QUERY
 // Query: *[_type == "story" && defined(slug.current)]{    "slug": slug.current  }
 export type STORY_SLUGS_QUERY_RESULT = Array<{
-  slug: string | null;
+  slug: string;
 }>;
 
 // Source: src/sanity/lib/queries.ts
 // Variable: STORY_BY_SLUG_QUERY
-// Query: *[_type == "story" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    category,    date,    intro,    cardImage {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    },    hero {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    },    figures[] {      _key,        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    }  }
+// Query: *[_type == "story" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    "category": coalesce(category->title, category),    date,    intro,    description,    cardImage {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    },    hero {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    },    figures[] {      _key,        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    }  }
 export type STORY_BY_SLUG_QUERY_RESULT = {
   _id: string;
-  title: string | null;
-  slug: string | null;
-  category: "Essay" | "Film" | "Photo" | null;
-  date: string | null;
+  title: string;
+  slug: string;
+  category: string;
+  date: string;
   intro: string | null;
+  description: string | null;
   cardImage: {
-    alt: string | null;
+    alt: string;
     image: {
       asset: {
         _id: string;
-        url: string | null;
+        url: string;
         metadata: {
           lqip: string | null;
           dimensions: SanityImageDimensions | null;
@@ -453,14 +471,14 @@ export type STORY_BY_SLUG_QUERY_RESULT = {
       } | null;
       hotspot: SanityImageHotspot | null;
       crop: SanityImageCrop | null;
-    } | null;
-  } | null;
+    };
+  };
   hero: {
-    alt: string | null;
+    alt: string;
     image: {
       asset: {
         _id: string;
-        url: string | null;
+        url: string;
         metadata: {
           lqip: string | null;
           dimensions: SanityImageDimensions | null;
@@ -468,15 +486,15 @@ export type STORY_BY_SLUG_QUERY_RESULT = {
       } | null;
       hotspot: SanityImageHotspot | null;
       crop: SanityImageCrop | null;
-    } | null;
+    };
   } | null;
   figures: Array<{
     _key: string;
-    alt: string | null;
+    alt: string;
     image: {
       asset: {
         _id: string;
-        url: string | null;
+        url: string;
         metadata: {
           lqip: string | null;
           dimensions: SanityImageDimensions | null;
@@ -484,7 +502,7 @@ export type STORY_BY_SLUG_QUERY_RESULT = {
       } | null;
       hotspot: SanityImageHotspot | null;
       crop: SanityImageCrop | null;
-    } | null;
+    };
   }> | null;
 } | null;
 
@@ -509,11 +527,11 @@ export type ABOUT_PAGE_QUERY_RESULT =
         _key: string;
         rotate: number | null;
         image: {
-          alt: string | null;
+          alt: string;
           image: {
             asset: {
               _id: string;
-              url: string | null;
+              url: string;
               metadata: {
                 lqip: string | null;
                 dimensions: SanityImageDimensions | null;
@@ -521,18 +539,18 @@ export type ABOUT_PAGE_QUERY_RESULT =
             } | null;
             hotspot: SanityImageHotspot | null;
             crop: SanityImageCrop | null;
-          } | null;
-        } | null;
+          };
+        };
       }> | null;
       whyHeading: string | null;
       whyText: string | null;
       contactHeading: string | null;
       contactImage: {
-        alt: string | null;
+        alt: string;
         image: {
           asset: {
             _id: string;
-            url: string | null;
+            url: string;
             metadata: {
               lqip: string | null;
               dimensions: SanityImageDimensions | null;
@@ -540,7 +558,7 @@ export type ABOUT_PAGE_QUERY_RESULT =
           } | null;
           hotspot: SanityImageHotspot | null;
           crop: SanityImageCrop | null;
-        } | null;
+        };
       } | null;
       contactIntro: string | null;
       contactOutro: string | null;
@@ -559,6 +577,12 @@ export type SITE_SETTINGS_QUERY_RESULT =
       connectLinks: null;
     }
   | {
+      title: string;
+      tagline: null;
+      footerLinks: null;
+      connectLinks: null;
+    }
+  | {
       title: string | null;
       tagline: null;
       footerLinks: null;
@@ -569,13 +593,13 @@ export type SITE_SETTINGS_QUERY_RESULT =
       tagline: string | null;
       footerLinks: Array<{
         _key: string;
-        label: string | null;
-        href: string | null;
+        label: string;
+        href: string;
       }> | null;
       connectLinks: Array<{
         _key: string;
-        label: string | null;
-        href: string | null;
+        label: string;
+        href: string;
         external: boolean | null;
       }> | null;
     }
@@ -585,10 +609,10 @@ export type SITE_SETTINGS_QUERY_RESULT =
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '{\n  "home": *[_id == "homePage"][0]{\n    heroImage {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    featuredStory->{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  category,\n  date,\n  cardImage {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n    },\n    featuredBackground {\n      \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n    },\n    beautifulPeople {\n      heading,\n      photos[] {\n        _key,\n        wide,\n        image {\n          \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n        }\n      }\n    },\n    imageBreak {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    }\n  },\n  "recentStories": *[_type == "story"] | order(date desc) [0...4] {\n    \n  _id,\n  title,\n  "slug": slug.current,\n  category,\n  date,\n  cardImage {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n  }\n}': HOME_PAGE_QUERY_RESULT;
-    '\n  *[_type == "story"] | order(date desc) {\n    \n  _id,\n  title,\n  "slug": slug.current,\n  category,\n  date,\n  cardImage {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n  }\n': ARCHIVE_PAGE_QUERY_RESULT;
+    '{\n  "home": *[_id == "homePage"][0]{\n    heroVideoUrl,\n    heroVideoPoster {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    categoriesHeading,\n    categories[]->{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  description,\n  image {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n    },\n    featuredStoriesHeading,\n    featuredStories[]->{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  "category": coalesce(category->title, category),\n  date,\n  "description": coalesce(description, intro),\n  cardImage {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n    }\n  },\n  "allCategories": *[_type == "category"] | order(title asc) {\n    \n  _id,\n  title,\n  "slug": slug.current,\n  description,\n  image {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n  },\n  "recentStories": *[_type == "story"] | order(date desc) [0...12] {\n    \n  _id,\n  title,\n  "slug": slug.current,\n  "category": coalesce(category->title, category),\n  date,\n  "description": coalesce(description, intro),\n  cardImage {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n  }\n}': HOME_PAGE_QUERY_RESULT;
+    '\n  *[_type == "story"] | order(date desc) {\n    \n  _id,\n  title,\n  "slug": slug.current,\n  "category": coalesce(category->title, category),\n  date,\n  "description": coalesce(description, intro),\n  cardImage {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n  }\n': ARCHIVE_PAGE_QUERY_RESULT;
     '\n  *[_type == "story" && defined(slug.current)]{\n    "slug": slug.current\n  }\n': STORY_SLUGS_QUERY_RESULT;
-    '\n  *[_type == "story" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    category,\n    date,\n    intro,\n    cardImage {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    hero {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    figures[] {\n      _key,\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    }\n  }\n': STORY_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "story" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    "category": coalesce(category->title, category),\n    date,\n    intro,\n    description,\n    cardImage {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    hero {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    figures[] {\n      _key,\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    }\n  }\n': STORY_BY_SLUG_QUERY_RESULT;
     '\n  *[_id == "aboutPage"][0]{\n    heading,\n    marqueeItems[] {\n      _key,\n      rotate,\n      image {\n        \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n      }\n    },\n    whyHeading,\n    whyText,\n    contactHeading,\n    contactImage {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    contactIntro,\n    contactOutro,\n    contactEmail\n  }\n': ABOUT_PAGE_QUERY_RESULT;
     '\n  *[_id == "siteSettings"][0]{\n    title,\n    tagline,\n    footerLinks[] {\n      _key,\n      label,\n      href\n    },\n    connectLinks[] {\n      _key,\n      label,\n      href,\n      external\n    }\n  }\n': SITE_SETTINGS_QUERY_RESULT;
   }

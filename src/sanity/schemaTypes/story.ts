@@ -25,16 +25,9 @@ export const story = defineType({
     defineField({
       name: 'category',
       title: 'Category',
-      type: 'string',
+      type: 'reference',
+      to: [{type: 'category'}],
       description: 'Editorial category for this story.',
-      options: {
-        list: [
-          {title: 'Photo', value: 'Photo'},
-          {title: 'Essay', value: 'Essay'},
-          {title: 'Film', value: 'Film'},
-        ],
-        layout: 'dropdown',
-      },
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -43,6 +36,13 @@ export const story = defineType({
       type: 'date',
       description: 'Publication date (YYYY-MM-DD).',
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'description',
+      title: 'Short Description',
+      type: 'text',
+      rows: 3,
+      description: 'Short summary for cards and search previews. Falls back to Intro if empty.',
     }),
     defineField({
       name: 'cardImage',
@@ -83,12 +83,12 @@ export const story = defineType({
   preview: {
     select: {
       title: 'title',
-      category: 'category',
+      categoryTitle: 'category.title',
       date: 'date',
       media: 'cardImage.image',
     },
-    prepare({title, category, date, media}) {
-      const subtitle = [category, date].filter(Boolean).join(' · ')
+    prepare({title, categoryTitle, date, media}) {
+      const subtitle = [categoryTitle, date].filter(Boolean).join(' · ')
       return {
         title: title || 'Untitled story',
         subtitle,

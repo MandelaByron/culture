@@ -8,94 +8,47 @@ export const homePage = defineType({
   icon: HomeIcon,
   fields: [
     defineField({
-      name: 'heroImage',
-      title: 'Hero Image',
+      name: 'heroVideoUrl',
+      title: 'Hero Video URL',
+      type: 'url',
+      description:
+        'Direct URL to the hero video file (e.g. MP4, WebM hosted on Cloudinary, Sanity file asset, or S3).',
+    }),
+    defineField({
+      name: 'heroVideoPoster',
+      title: 'Hero Video Poster',
       type: 'accessibleImage',
-      description: 'Full-screen hero.',
-      validation: (rule) => rule.required(),
+      description: 'Optional placeholder image displayed while the hero video loads.',
     }),
     defineField({
-      name: 'featuredStory',
-      title: 'Featured Story',
-      type: 'reference',
-      description: 'Story highlighted in the Featured Story section.',
-      to: [{type: 'story'}],
-      validation: (rule) => rule.required(),
+      name: 'categoriesHeading',
+      title: 'Categories Section Heading',
+      type: 'string',
+      description: 'Heading above the category cards. Defaults to "What interests you?".',
+      initialValue: 'What interests you?',
     }),
     defineField({
-      name: 'featuredBackground',
-      title: 'Featured Background',
-      type: 'image',
-      description: 'Decorative textured background for the Featured Story section.',
+      name: 'categories',
+      title: 'Categories to Display',
+      type: 'array',
+      description:
+        'Curated list of categories shown on the home page. If empty, all published categories will be shown.',
+      of: [defineArrayMember({type: 'reference', to: [{type: 'category'}]})],
     }),
     defineField({
-      name: 'beautifulPeople',
-      title: 'Beautiful People',
-      type: 'object',
-      description: 'Photo grid section on the home page.',
-      fields: [
-        defineField({
-          name: 'heading',
-          title: 'Heading',
-          type: 'string',
-          description: 'Section heading.',
-          initialValue: 'Beautiful People',
-        }),
-        defineField({
-          name: 'photos',
-          title: 'Photos',
-          type: 'array',
-          description: 'Grid photos. Mark one as wide to span two columns.',
-          of: [
-            defineArrayMember({
-              type: 'object',
-              name: 'beautifulPeoplePhoto',
-              title: 'Photo',
-              fields: [
-                defineField({
-                  name: 'image',
-                  title: 'Image',
-                  type: 'accessibleImage',
-                  validation: (rule) => rule.required(),
-                }),
-                defineField({
-                  name: 'wide',
-                  title: 'Wide',
-                  type: 'boolean',
-                  description: 'When true, this tile spans two columns.',
-                  initialValue: false,
-                }),
-              ],
-              preview: {
-                select: {
-                  title: 'image.alt',
-                  wide: 'wide',
-                  media: 'image.image',
-                },
-                prepare({title, wide, media}) {
-                  return {
-                    title: title || 'Photo',
-                    subtitle: wide ? 'Wide tile' : 'Square tile',
-                    media,
-                  }
-                },
-              },
-            }),
-          ],
-          validation: (rule) =>
-            rule
-              .required()
-              .min(5)
-              .max(6)
-              .error('Beautiful People needs 5 to 6 photos.'),
-        }),
-      ],
+      name: 'featuredStoriesHeading',
+      title: 'Featured Stories Heading',
+      type: 'string',
+      description: 'Heading above the featured stories grid. Defaults to "Featured Stories".',
+      initialValue: 'Featured Stories',
     }),
     defineField({
-      name: 'imageBreak',
-      title: 'Image Break',
-      type: 'accessibleImage',
-      description: 'Full-width image before the footer.',
+      name: 'featuredStories',
+      title: 'Featured Stories',
+      type: 'array',
+      description:
+        'Selected stories to feature on the home page (up to 12). If empty, the newest stories are shown.',
+      of: [defineArrayMember({type: 'reference', to: [{type: 'story'}]})],
     }),
   ],
   preview: {

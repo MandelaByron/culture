@@ -20,12 +20,23 @@ export const accessibleImageFragment = /* groq */ `
   }
 `
 
+export const categoryCardFragment = /* groq */ `
+  _id,
+  title,
+  "slug": slug.current,
+  description,
+  image {
+    ${accessibleImageFragment}
+  }
+`
+
 export const storyCardFragment = /* groq */ `
   _id,
   title,
   "slug": slug.current,
-  category,
+  "category": coalesce(category->title, category),
   date,
+  "description": coalesce(description, intro),
   cardImage {
     ${accessibleImageFragment}
   }

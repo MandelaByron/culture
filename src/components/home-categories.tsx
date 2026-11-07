@@ -12,9 +12,10 @@ export type CategoryCard = {
 
 type HomeCategoriesProps = {
   items: CategoryCard[]
+  heading?: string
 }
 
-export function HomeCategories({items}: HomeCategoriesProps) {
+export function HomeCategories({items, heading = 'What interests you?'}: HomeCategoriesProps) {
   if (!items.length) return null
 
   return (
@@ -22,7 +23,7 @@ export function HomeCategories({items}: HomeCategoriesProps) {
       <div className="mx-auto max-w-6xl">
         {/* Section heading */}
         <h2 className="mb-8 font-serif text-3xl font-medium tracking-tight text-white sm:text-4xl">
-          What interests you?
+          {heading}
         </h2>
 
         {/* 4-column card row — collapses to 2 on mobile */}
