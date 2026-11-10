@@ -32,58 +32,107 @@ export default async function AboutPage() {
 
   return (
     <main className="bg-grain min-h-svh text-white [--grain-base:#161616]">
-      <h1 className="px-3 pt-32 text-center text-8xl font-black leading-none tracking-tighter sm:pt-40 sm:text-[11rem]">
+      {/* ── Page Title ─────────────────────────────────────────────────── */}
+      <h1 className="px-4 pb-12 pt-36 text-center font-serif text-7xl font-medium leading-none tracking-tight sm:pb-16 sm:pt-44 sm:text-9xl">
         {heading}
       </h1>
 
+      {/* ── Marquee of cutouts / found objects ─────────────────────────── */}
       <AboutMarquee items={marqueeItems} />
 
+      {/* ── Why this exists / Mission ──────────────────────────────────── */}
       {whyText ? (
-        <section className="mx-auto grid max-w-5xl gap-3 pb-24 sm:pb-40 md:grid-cols-[240px_1fr]">
-          <h2 className="text-xl font-semibold">{whyHeading}</h2>
-          <p className="whitespace-pre-line text-xl font-semibold leading-7">{whyText}</p>
+        <section className="px-4 py-16 sm:py-24">
+          <div className="mx-auto max-w-3xl">
+            <p className="mb-4 font-serif text-xs font-bold uppercase tracking-widest text-white/40">
+              {whyHeading}
+            </p>
+            <p className="whitespace-pre-line font-serif text-xl sm:text-2xl font-normal leading-relaxed text-white/90">
+              {whyText}
+            </p>
+          </div>
         </section>
       ) : null}
 
-      <section className="grid items-center gap-10 p-1.5 pb-16 md:grid-cols-2 md:gap-0">
-        {contactImage ? (
-          <div className="relative aspect-[5/4] w-full overflow-hidden rounded-lg">
-            <Image
-              src={contactImage.src}
-              alt={contactImage.alt}
-              fill
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="object-cover"
-              style={
-                contactImage.objectPosition
-                  ? {objectPosition: contactImage.objectPosition}
-                  : undefined
-              }
-            />
-          </div>
-        ) : (
-          <div />
-        )}
+      {/* ── Divider ────────────────────────────────────────────────────── */}
+      <div className="mx-auto max-w-5xl px-4">
+        <div className="h-px w-full bg-white/10" />
+      </div>
 
-        <div className="max-w-sm px-4 md:mx-auto md:px-0">
-          <h2 className="text-lg font-semibold">{contactHeading}</h2>
-          {contactIntro ? (
-            <p className="mt-6 text-base font-semibold leading-7">{contactIntro}</p>
-          ) : null}
-          {contactOutro || contactEmail ? (
-            <p className="mt-6 text-base font-semibold leading-7">
-              {contactOutro ? `${contactOutro} ` : null}
-              {contactEmail ? (
-                <a
-                  href={`mailto:${contactEmail}`}
-                  className="underline underline-offset-2 hover:opacity-70"
-                >
-                  {contactEmail}
-                </a>
+      {/* ── Contact Section ─────────────────────────────────────────────── */}
+      <section className="px-4 py-16 sm:py-24">
+        <div className="mx-auto max-w-5xl">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+            {/* Contact Image — centralized, natural aspect ratio, no crop */}
+            {contactImage ? (
+              <div className="overflow-hidden rounded-2xl bg-[#1d1d1d]">
+                {contactImage.naturalWidth && contactImage.naturalHeight ? (
+                  <Image
+                    src={contactImage.src}
+                    alt={contactImage.alt}
+                    width={contactImage.naturalWidth}
+                    height={contactImage.naturalHeight}
+                    sizes="(min-width: 1024px) 480px, (min-width: 640px) 600px, 100vw"
+                    className="h-auto w-full object-cover"
+                    style={
+                      contactImage.objectPosition
+                        ? {objectPosition: contactImage.objectPosition}
+                        : undefined
+                    }
+                  />
+                ) : (
+                  <div className="relative aspect-[4/3] w-full">
+                    <Image
+                      src={contactImage.src}
+                      alt={contactImage.alt}
+                      fill
+                      sizes="(min-width: 1024px) 480px, (min-width: 640px) 600px, 100vw"
+                      className="object-cover"
+                      style={
+                        contactImage.objectPosition
+                          ? {objectPosition: contactImage.objectPosition}
+                          : undefined
+                      }
+                    />
+                  </div>
+                )}
+              </div>
+            ) : null}
+
+            {/* Contact Details */}
+            <div className="flex flex-col justify-center">
+              <p className="mb-3 font-serif text-xs font-bold uppercase tracking-widest text-white/40">
+                Contact
+              </p>
+              <h2 className="font-serif text-3xl font-medium tracking-tight text-white sm:text-4xl">
+                {contactHeading}
+              </h2>
+
+              {contactIntro ? (
+                <p className="mt-4 font-serif text-base leading-relaxed text-white/80 sm:text-lg">
+                  {contactIntro}
+                </p>
               ) : null}
-              {contactEmail ? '.' : null}
-            </p>
-          ) : null}
+
+              {(contactOutro || contactEmail) && (
+                <div className="mt-6 rounded-xl border border-white/10 bg-white/[0.02] p-5 sm:p-6 backdrop-blur-xs">
+                  {contactOutro ? (
+                    <p className="text-xs uppercase tracking-wider text-white/50">
+                      {contactOutro}
+                    </p>
+                  ) : null}
+                  {contactEmail ? (
+                    <a
+                      href={`mailto:${contactEmail}`}
+                      className="mt-2 inline-block font-serif text-xl font-medium text-white underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-white sm:text-2xl"
+                    >
+                      {contactEmail}
+                    </a>
+                  ) : null}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </section>
     </main>
