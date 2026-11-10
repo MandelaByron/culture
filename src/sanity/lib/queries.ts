@@ -58,7 +58,12 @@ export const STORY_BY_SLUG_QUERY = defineQuery(/* groq */ `
     },
     figures[] {
       _key,
-      ${accessibleImageFragment}
+      caption,
+      credit,
+      year,
+      image {
+        ${accessibleImageFragment}
+      }
     }
   }
 `)

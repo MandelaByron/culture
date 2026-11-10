@@ -1,6 +1,5 @@
 import type {StoryCardItem} from '@/components/story-cards'
 import type {CategoryCard} from '@/components/home-categories'
-import type {FeaturedStoryCard} from '@/components/featured-stories'
 import type {BeautifulPeoplePhoto} from '@/components/beautiful_people'
 import type {FeaturedStoryData} from '@/components/featurestory'
 import type {AboutMarqueeItem} from '@/components/about-marquee'
@@ -8,15 +7,16 @@ import type {FooterLink} from '@/components/footer'
 import {resolveAccessibleImage, resolveDecorativeImage} from './image'
 
 type StoryCardSource = {
-  slug: string | null
-  title: string | null
-  category: string | null
-  date: string | null
-  cardImage: Parameters<typeof resolveAccessibleImage>[0]
+  slug?: string | null
+  title?: string | null
+  category?: string | null
+  date?: string | null
+  description?: string | null
+  cardImage?: Parameters<typeof resolveAccessibleImage>[0]
 }
 
 export function toStoryCardItem(story: StoryCardSource | null | undefined): StoryCardItem | null {
-  if (!story?.slug || !story.title || !story.category || !story.date) return null
+  if (!story?.slug || !story.title) return null
 
   const image = resolveAccessibleImage(story.cardImage, 1200)
   if (!image) return null
@@ -24,15 +24,16 @@ export function toStoryCardItem(story: StoryCardSource | null | undefined): Stor
   return {
     slug: story.slug,
     title: story.title,
-    category: story.category,
-    date: story.date,
+    category: story.category ?? 'Story',
+    date: story.date ?? null,
+    description: story.description ?? null,
     image: image.src,
-    alt: image.alt,
+    alt: image.alt || story.title,
   }
 }
 
 export function toStoryCardItems(
-  stories: Array<StoryCardSource | null> | null | undefined,
+  stories: Array<StoryCardSource | null | undefined> | null | undefined,
 ): StoryCardItem[] {
   const items: StoryCardItem[] = []
   for (const story of stories ?? []) {
@@ -75,43 +76,8 @@ export function toCategoryCardItems(
   return items
 }
 
-type FeaturedStoryCardSource = {
-  slug?: string | null
-  title?: string | null
-  category?: string | null
-  description?: string | null
-  date?: string | null
-  cardImage?: Parameters<typeof resolveAccessibleImage>[0]
-}
-
-export function toFeaturedStoryCardItem(
-  story: FeaturedStoryCardSource | null | undefined,
-): FeaturedStoryCard | null {
-  if (!story?.slug || !story.title) return null
-
-  const resolved = resolveAccessibleImage(story.cardImage, 1200)
-  if (!resolved) return null
-
-  return {
-    slug: story.slug,
-    title: story.title,
-    description: story.description ?? '',
-    category: story.category ?? 'Story',
-    image: resolved.src,
-    alt: resolved.alt || story.title,
-  }
-}
-
-export function toFeaturedStoryCards(
-  stories: Array<FeaturedStoryCardSource | null | undefined> | null | undefined,
-): FeaturedStoryCard[] {
-  const items: FeaturedStoryCard[] = []
-  for (const story of stories ?? []) {
-    const item = toFeaturedStoryCardItem(story)
-    if (item) items.push(item)
-  }
-  return items
-}
+export const toFeaturedStoryCardItem = toStoryCardItem
+export const toFeaturedStoryCards = toStoryCardItems
 
 export function toFeaturedStory(
   story: StoryCardSource | null | undefined,

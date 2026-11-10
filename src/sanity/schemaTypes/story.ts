@@ -69,8 +69,59 @@ export const story = defineType({
       title: 'Figures',
       type: 'array',
       description:
-        'Images shown after the intro. Captions use the story title and category/date.',
-      of: [defineArrayMember({type: 'accessibleImage'})],
+        'Images shown after the intro. Each figure includes a custom caption (description, credit, year).',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'storyFigure',
+          title: 'Figure',
+          fields: [
+            defineField({
+              name: 'image',
+              title: 'Image',
+              type: 'accessibleImage',
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'caption',
+              title: 'Caption / Description',
+              type: 'text',
+              rows: 2,
+              description: 'Short informative description of this figure.',
+            }),
+            defineField({
+              name: 'credit',
+              title: 'Credit',
+              type: 'string',
+              description:
+                'Photographer, creator, or archive credit (e.g. "Jane Doe / Magnum Photos").',
+            }),
+            defineField({
+              name: 'year',
+              title: 'Year',
+              type: 'string',
+              description: 'Year the photo was taken or created (e.g. "2024").',
+            }),
+          ],
+          preview: {
+            select: {
+              caption: 'caption',
+              credit: 'credit',
+              year: 'year',
+              alt: 'image.alt',
+              media: 'image.image',
+            },
+            prepare({caption, credit, year, alt, media}) {
+              const meta = [credit, year].filter(Boolean).join(' · ')
+              return {
+                title: caption || alt || 'Figure',
+                subtitle: meta,
+                media,
+              }
+            },
+          },
+        }),
+      ],
     }),
   ],
   orderings: [

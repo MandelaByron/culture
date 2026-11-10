@@ -44,8 +44,8 @@ export default async function StoriesPage() {
   const items = toStoryCardItems(data)
 
   return (
-    <main className="min-h-svh text-white">
-      <h1 className="px-3 pb-32 pt-36 text-center font-serif text-7xl font-medium leading-none tracking-tight sm:pb-48 sm:pt-44 sm:text-9xl">
+    <main className="bg-grain min-h-svh text-white [--grain-base:#161616]">
+      <h1 className="px-3 pb-16 pt-36 text-center font-serif text-7xl font-medium leading-none tracking-tight sm:pb-24 sm:pt-44 sm:text-9xl">
         Stories
       </h1>
 

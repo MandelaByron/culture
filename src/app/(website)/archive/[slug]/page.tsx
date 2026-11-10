@@ -10,7 +10,6 @@ import {toStoryCardItems} from '@/sanity/lib/mappers'
 import {
   ARCHIVE_PAGE_QUERY,
   STORY_BY_SLUG_QUERY,
-  STORY_SLUGS_QUERY,
 } from '@/sanity/lib/queries'
 
 // export async function generateStaticParams() {
@@ -62,12 +61,15 @@ export default async function StoryPage(props: StoryPageProps) {
   const meta = [story.category, story.date ? formatDate(story.date) : null]
     .filter(Boolean)
     .join(' · ')
+  const more = toStoryCardItems(allStories)
+    .filter((item) => item.slug !== story.slug)
+    .slice(0, 3)
 
   return (
     <main className="bg-grain min-h-svh text-white [--grain-base:#161616]">
 
       {/* ── Title ─────────────────────────────────────────────────────── */}
-      <h1 className="mx-auto max-w-4xl text-balance px-4 pb-16 pt-36 text-center font-serif text-6xl font-medium leading-none tracking-tight sm:pb-28 sm:pt-44 sm:text-8xl">
+      <h1 className="mx-auto max-w-4xl text-balance px-4 pb-16 pt-36 text-center font-serif text-3xl font-medium leading-none tracking-tight sm:pb-28 sm:pt-44 sm:text-6xl">
         {story.title}
       </h1>
 
@@ -112,9 +114,9 @@ export default async function StoryPage(props: StoryPageProps) {
         </section>
       ) : null}
 
-      {/* ── Figures — natural ratio, caption below ─────────────────────── */}
+      {/* ── Figures — natural ratio, informative caption below ─────────── */}
       {story.figures?.map((figure) => {
-        const image = resolveAccessibleImage(figure, 2000)
+        const image = resolveAccessibleImage(figure.image, 2000)
         if (!image) return null
 
         return (
@@ -123,12 +125,22 @@ export default async function StoryPage(props: StoryPageProps) {
             image={image.src}
             alt={image.alt}
             title={story.title ?? 'Untitled'}
+            caption={figure.caption}
+            credit={figure.credit}
+            year={figure.year}
             meta={meta}
             naturalWidth={image.naturalWidth}
             naturalHeight={image.naturalHeight}
           />
         )
       })}
+
+      {/* ── More Stories ──────────────────────────────────────────────── */}
+      {more.length > 0 && (
+        <section className="mt-16 border-t border-white/10 pt-8 sm:mt-24 sm:pt-12">
+          <StoryCards items={more} heading="More Stories" />
+        </section>
+      )}
 
     </main>
   )

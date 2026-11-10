@@ -129,11 +129,14 @@ export type Story = {
   cardImage: AccessibleImage;
   hero?: AccessibleImage;
   intro?: string;
-  figures?: Array<
-    {
-      _key: string;
-    } & AccessibleImage
-  >;
+  figures?: Array<{
+    image: AccessibleImage;
+    caption?: string;
+    credit?: string;
+    year?: string;
+    _type: "storyFigure";
+    _key: string;
+  }>;
 };
 
 export type Slug = {
@@ -449,7 +452,7 @@ export type STORY_SLUGS_QUERY_RESULT = Array<{
 
 // Source: src/sanity/lib/queries.ts
 // Variable: STORY_BY_SLUG_QUERY
-// Query: *[_type == "story" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    "category": coalesce(category->title, category),    date,    intro,    description,    cardImage {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    },    hero {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    },    figures[] {      _key,        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    }  }
+// Query: *[_type == "story" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    "category": coalesce(category->title, category),    date,    intro,    description,    cardImage {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    },    hero {        alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }    },    figures[] {      _key,      caption,      credit,      year,      image {          alt,  image {      asset->{    _id,    url,    metadata {      lqip,      dimensions    }  },  hotspot,  crop  }      }    }  }
 export type STORY_BY_SLUG_QUERY_RESULT = {
   _id: string;
   title: string;
@@ -490,18 +493,23 @@ export type STORY_BY_SLUG_QUERY_RESULT = {
   } | null;
   figures: Array<{
     _key: string;
-    alt: string;
+    caption: string | null;
+    credit: string | null;
+    year: string | null;
     image: {
-      asset: {
-        _id: string;
-        url: string;
-        metadata: {
-          lqip: string | null;
-          dimensions: SanityImageDimensions | null;
+      alt: string;
+      image: {
+        asset: {
+          _id: string;
+          url: string;
+          metadata: {
+            lqip: string | null;
+            dimensions: SanityImageDimensions | null;
+          } | null;
         } | null;
-      } | null;
-      hotspot: SanityImageHotspot | null;
-      crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+      };
     };
   }> | null;
 } | null;
@@ -612,7 +620,7 @@ declare module "@sanity/client" {
     '{\n  "home": *[_id == "homePage"][0]{\n    heroVideoUrl,\n    heroVideoPoster {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    categoriesHeading,\n    categories[]->{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  description,\n  image {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n    },\n    featuredStoriesHeading,\n    featuredStories[]->{\n      \n  _id,\n  title,\n  "slug": slug.current,\n  "category": coalesce(category->title, category),\n  date,\n  "description": coalesce(description, intro),\n  cardImage {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n    }\n  },\n  "allCategories": *[_type == "category"] | order(title asc) {\n    \n  _id,\n  title,\n  "slug": slug.current,\n  description,\n  image {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n  },\n  "recentStories": *[_type == "story"] | order(date desc) [0...12] {\n    \n  _id,\n  title,\n  "slug": slug.current,\n  "category": coalesce(category->title, category),\n  date,\n  "description": coalesce(description, intro),\n  cardImage {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n  }\n}': HOME_PAGE_QUERY_RESULT;
     '\n  *[_type == "story"] | order(date desc) {\n    \n  _id,\n  title,\n  "slug": slug.current,\n  "category": coalesce(category->title, category),\n  date,\n  "description": coalesce(description, intro),\n  cardImage {\n    \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n  }\n\n  }\n': ARCHIVE_PAGE_QUERY_RESULT;
     '\n  *[_type == "story" && defined(slug.current)]{\n    "slug": slug.current\n  }\n': STORY_SLUGS_QUERY_RESULT;
-    '\n  *[_type == "story" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    "category": coalesce(category->title, category),\n    date,\n    intro,\n    description,\n    cardImage {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    hero {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    figures[] {\n      _key,\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    }\n  }\n': STORY_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "story" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    "category": coalesce(category->title, category),\n    date,\n    intro,\n    description,\n    cardImage {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    hero {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    figures[] {\n      _key,\n      caption,\n      credit,\n      year,\n      image {\n        \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n      }\n    }\n  }\n': STORY_BY_SLUG_QUERY_RESULT;
     '\n  *[_id == "aboutPage"][0]{\n    heading,\n    marqueeItems[] {\n      _key,\n      rotate,\n      image {\n        \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n      }\n    },\n    whyHeading,\n    whyText,\n    contactHeading,\n    contactImage {\n      \n  alt,\n  image {\n    \n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions\n    }\n  },\n  hotspot,\n  crop\n\n  }\n\n    },\n    contactIntro,\n    contactOutro,\n    contactEmail\n  }\n': ABOUT_PAGE_QUERY_RESULT;
     '\n  *[_id == "siteSettings"][0]{\n    title,\n    tagline,\n    footerLinks[] {\n      _key,\n      label,\n      href\n    },\n    connectLinks[] {\n      _key,\n      label,\n      href,\n      external\n    }\n  }\n': SITE_SETTINGS_QUERY_RESULT;
   }
