@@ -21,7 +21,7 @@ export function Hero({src, alt}: HeroProps) {
         {/* <h1 className="absolute inset-x-0 bottom-0">
           <Image
             src="/images/logo.svg"
-            alt="Grain Archive"
+            alt="Chedi"
             width={355}
             height={58}
             priority

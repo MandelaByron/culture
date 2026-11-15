@@ -12,7 +12,7 @@ export const siteSettings = defineType({
       title: 'Site Title',
       type: 'string',
       description: 'Site name used in metadata and branding copy.',
-      initialValue: 'Grain Archive',
+      initialValue: 'Chedi',
     }),
     defineField({
       name: 'tagline',

@@ -25,8 +25,8 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   metadataBase: new URL("https://next-mdx-blog.vercel.app"),
   alternates: { canonical: "/" },
-  title: { default: "Byron Mandela", template: "%s | Byron Mandela" },
-  description: "Engineer and writer.",
+  title: { default: "Chedi", template: "%s | Chedi" },
+  description: "Words, images, and signals from the edge.",
 };
 
 export default async function RootLayout({
@@ -37,7 +37,7 @@ export default async function RootLayout({
   const {isEnabled: isDraftMode} = await draftMode()
   const {data} = await sanityFetch({query: SITE_SETTINGS_QUERY})
 
-  const title = data?.title ?? 'Grain Archive'
+  const title = data?.title ?? 'Chedi'
   const tagline = data?.tagline ?? 'Words, images, and signals from the edge'
   const footerLinks = toFooterLinks(data?.footerLinks)
   const connectLinks = toFooterLinks(data?.connectLinks)

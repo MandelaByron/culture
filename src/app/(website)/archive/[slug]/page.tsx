@@ -42,7 +42,7 @@ export async function generateMetadata(
   if (!story) return {}
 
   return {
-    title: `${story.title} | Grain Archive`,
+    title: `${story.title} | Chedi`,
     description: story.intro,
   }
 }

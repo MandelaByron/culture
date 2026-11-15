@@ -7,7 +7,7 @@ import {ARCHIVE_PAGE_QUERY, SITE_SETTINGS_QUERY} from '@/sanity/lib/queries'
 
 export async function generateMetadata(): Promise<Metadata> {
   const {data: settings} = await sanityFetch({query: SITE_SETTINGS_QUERY, stega: false})
-  const title = settings?.title ?? 'Grain Archive'
+  const title = settings?.title ?? 'Chedi'
   const tagline = settings?.tagline ?? 'Words, images, and signals from the edge'
 
   return {

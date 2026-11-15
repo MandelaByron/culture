@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 export type FooterLink = {
@@ -49,7 +50,7 @@ function LinkGroup({title, items}: {title: string; items: FooterLink[]}) {
 }
 
 export function Footer({
-  title = 'Grain Archive',
+  title = 'Chedi',
   tagline = 'Words, images, and signals from the edge',
   footerLinks = [],
   connectLinks = [],
@@ -68,9 +69,20 @@ export function Footer({
 
           {/* Brand */}
           <div className="max-w-xs">
-            <p className="font-serif text-2xl font-medium tracking-tight text-white">
-              {title}
-            </p>
+            <Link
+              href="/"
+              className="mb-3 inline-block transition-transform hover:scale-105"
+              aria-label="Chedi"
+            >
+              <Image
+                src="/chedi-main.svg"
+                alt="Chedi logo"
+                width={80}
+                height={80}
+                className="h-20 w-auto object-contain"
+              />
+            </Link>
+
             <p className="mt-2 text-sm leading-relaxed text-white/50">
               {tagline}
             </p>
