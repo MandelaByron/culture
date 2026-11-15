@@ -4,7 +4,7 @@ import {notFound} from 'next/navigation'
 import {StoryFigure} from '@/components/storyfigure'
 import {StoryCards} from '@/components/story-cards'
 import {formatDate} from '@/lib/format-date'
-import {resolveAccessibleImage} from '@/sanity/lib/image'
+import {resolveAccessibleImage, urlFor} from '@/sanity/lib/image'
 import {sanityFetch} from '@/sanity/lib/live'
 import {toStoryCardItems} from '@/sanity/lib/mappers'
 import {
@@ -41,9 +41,53 @@ export async function generateMetadata(
 
   if (!story) return {}
 
+  const title = `${story.title} | Chedi`
+  const description =
+    story.intro || story.description || 'Words, images, and signals from the edge.'
+
+  const heroSource = story.hero ?? story.cardImage
+  const heroImageUrl = heroSource?.image
+    ? urlFor(heroSource.image).width(1200).height(630).fit('crop').url()
+    : resolveAccessibleImage(heroSource, 1200)?.src
+  const heroAlt = heroSource?.alt || story.title || 'Chedi Story'
+
+  const ogImages = heroImageUrl
+    ? [
+        {
+          url: heroImageUrl,
+          width: 1200,
+          height: 630,
+          alt: heroAlt,
+        },
+      ]
+    : [
+        {
+          url: '/chedi-og.png',
+          width: 1200,
+          height: 630,
+          alt: `${story.title} | Chedi`,
+          type: 'image/png',
+        },
+      ]
+
   return {
-    title: `${story.title} | Chedi`,
-    description: story.intro,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      url: `/archive/${slug}`,
+      siteName: 'Chedi',
+      images: ogImages,
+      publishedTime: story.date ?? undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: heroImageUrl ? [heroImageUrl] : ['/chedi-og.png'],
+    },
   }
 }
 

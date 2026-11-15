@@ -22,12 +22,65 @@ const poppins = Poppins({
   variable: '--font-poppins',
 })
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://next-mdx-blog.vercel.app"),
-  alternates: { canonical: "/" },
-  title: { default: "Chedi", template: "%s | Chedi" },
-  description: "Words, images, and signals from the edge.",
-};
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  ? process.env.NEXT_PUBLIC_SITE_URL
+  : process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'https://chedi.vercel.app'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const {data} = await sanityFetch({query: SITE_SETTINGS_QUERY, stega: false})
+
+  const title = data?.title ?? 'Chedi'
+  const description = data?.tagline ?? 'Words, images, and signals from the edge.'
+
+  return {
+    metadataBase: new URL(siteUrl),
+    alternates: { canonical: '/' },
+    title: {
+      default: title,
+      template: `%s | ${title}`,
+    },
+    description,
+    icons: {
+      icon: [
+        { url: '/favicon.ico' },
+        { url: '/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
+        { url: '/android-chrome-512x512.png', sizes: '512x512', type: 'image/png' },
+      ],
+      apple: [
+        { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      ],
+      shortcut: '/favicon.ico',
+    },
+    manifest: '/site.webmanifest',
+    openGraph: {
+      type: 'website',
+      locale: 'en_US',
+      url: '/',
+      siteName: title,
+      title,
+      description,
+      images: [
+        {
+          url: '/chedi-og.png',
+          width: 1200,
+          height: 630,
+          alt: `${title} Logo`,
+          type: 'image/png',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/chedi-og.png'],
+    },
+  }
+}
 
 export default async function RootLayout({
   children,
