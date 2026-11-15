@@ -113,14 +113,14 @@ export default async function StoryPage(props: StoryPageProps) {
     <main className="bg-grain min-h-svh text-white [--grain-base:#161616]">
 
       {/* ── Title ─────────────────────────────────────────────────────── */}
-      <h1 className="mx-auto max-w-4xl text-balance px-4 pb-16 pt-36 text-center font-serif text-3xl font-medium leading-none tracking-tight sm:pb-28 sm:pt-44 sm:text-6xl">
+      <h1 className="mx-auto max-w-4xl text-balance px-4 pb-12 pt-32 text-center font-serif text-3xl font-medium leading-none tracking-tight sm:pb-20 sm:pt-40 sm:text-6xl">
         {story.title}
       </h1>
 
-      {/* ── Hero image — natural ratio, no crop, centred spine ─────────── */}
+      {/* ── Hero image — natural ratio, constrained height, no crop ────── */}
       {hero ? (
         <section className="px-4 pb-10 sm:pb-16">
-          <div className="mx-auto max-w-4xl overflow-hidden rounded-lg">
+          <div className="mx-auto flex max-w-3xl justify-center overflow-hidden rounded-lg">
             {hero.naturalWidth && hero.naturalHeight ? (
               <Image
                 src={hero.src}
@@ -128,18 +128,18 @@ export default async function StoryPage(props: StoryPageProps) {
                 width={hero.naturalWidth}
                 height={hero.naturalHeight}
                 preload
-                sizes="(min-width: 1024px) 896px, (min-width: 640px) calc(100vw - 2rem), 100vw"
-                className="h-auto w-full"
+                sizes="(min-width: 1024px) 768px, (min-width: 640px) calc(100vw - 2rem), 100vw"
+                className="h-auto max-h-[50vh] sm:max-h-[60vh] lg:max-h-[500px] w-auto max-w-full rounded-lg object-contain shadow-md"
               />
             ) : (
               /* Fallback if metadata is absent */
-              <div className="relative aspect-[4/3] sm:aspect-[3/2]">
+              <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full max-h-[500px] overflow-hidden rounded-lg">
                 <Image
                   src={hero.src}
                   alt={hero.alt}
                   fill
                   preload
-                  sizes="(min-width: 1024px) 896px, (min-width: 640px) calc(100vw - 2rem), 100vw"
+                  sizes="(min-width: 1024px) 768px, (min-width: 640px) calc(100vw - 2rem), 100vw"
                   className="object-cover"
                 />
               </div>

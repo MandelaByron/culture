@@ -44,27 +44,27 @@ export function StoryFigure({
   const secondaryText = metaParts.length > 0 ? metaParts.join(' · ') : meta
 
   return (
-    <section className="px-4 py-10 sm:py-14">
-      <figure className="mx-auto max-w-4xl">
-        {/* Image — scales to container width at its intrinsic ratio, no crop */}
-        <div className="overflow-hidden rounded-lg">
+    <section className="px-4 py-8 sm:py-12">
+      <figure className="mx-auto max-w-3xl">
+        {/* Image — natural ratio, constrained height, no crop */}
+        <div className="flex justify-center overflow-hidden rounded-lg">
           {hasNaturalDims ? (
             <Image
               src={image}
               alt={alt}
               width={naturalWidth}
               height={naturalHeight}
-              sizes="(min-width: 1024px) 896px, (min-width: 640px) calc(100vw - 2rem), 100vw"
-              className="h-auto w-full"
+              sizes="(min-width: 1024px) 768px, (min-width: 640px) calc(100vw - 2rem), 100vw"
+              className="h-auto max-h-[50vh] sm:max-h-[60vh] lg:max-h-[500px] w-auto max-w-full rounded-lg object-contain shadow-md"
             />
           ) : (
-            /* Fallback: fill inside a 3:2 box if metadata is unavailable */
-            <div className="relative aspect-[3/2] w-full">
+            /* Fallback: fill inside a 16:10 box if metadata is unavailable */
+            <div className="relative aspect-[16/10] w-full max-h-[500px] overflow-hidden rounded-lg">
               <Image
                 src={image}
                 alt={alt}
                 fill
-                sizes="(min-width: 1024px) 896px, (min-width: 640px) calc(100vw - 2rem), 100vw"
+                sizes="(min-width: 1024px) 768px, (min-width: 640px) calc(100vw - 2rem), 100vw"
                 className="object-cover"
               />
             </div>
@@ -73,7 +73,7 @@ export function StoryFigure({
 
         {/* Informative caption below the image */}
         {(primaryText || secondaryText) && (
-          <figcaption className="mt-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6 px-1">
+          <figcaption className="mt-3.5 flex flex-col gap-1 px-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
             {primaryText && (
               <p className="font-serif text-sm leading-relaxed text-white/90">
                 {primaryText}
