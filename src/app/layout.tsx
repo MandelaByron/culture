@@ -4,6 +4,7 @@ import {Poppins} from 'next/font/google'
 import {draftMode} from 'next/headers'
 
 import {VisualEditing} from 'next-sanity/visual-editing'
+import { SanityLive } from '@/sanity/lib/live'
 
 
 import Footer from '@/components/footer'
@@ -52,6 +53,7 @@ export default async function RootLayout({
           footerLinks={footerLinks}
           connectLinks={connectLinks}
         />
+        <SanityLive />
         {isDraftMode ? <VisualEditing /> : null}
       </body>
     </html>

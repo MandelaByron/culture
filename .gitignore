@@ -11,6 +11,7 @@
 !.yarn/versions
 
 css.txt
+backup.tar.gz
 # testing
 /coverage
 
